@@ -302,7 +302,7 @@ var paths = {
 
     "repath": { 
         description: "Anyhing else I can I help you with?",
-        commands: { "I have a question": "question", "I have a technical problem": "support", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
+        commands: { "I have another question": "question", "I have another technical problem": "support", "My tickets": "mytickets"  }
     },    
 
     "question": { 
@@ -514,10 +514,12 @@ bot.dialog('/getUserQuestion', [
                 'CreatedBy':UserName,
                 'CreatedByEmail':UserEmail,
                 'ObjectNo':TicketNo,
-                'ObjectType':'Question',
+                'ObjectReason':session.userData.engagementReason,
+                'ObjectType':session.userData.engagementReasonAppType,
+                'ObjectSevirityLevel':session.userData.engagementReasonSevirityLevel,
                 'ObjectFormat':'txt',
                 'ObjectTxt':results.response,
-                'Status':'draft'
+                'Status':'new'
             }    	
             
             collTickets.insert(TicketRecord, function(err, result){
@@ -591,7 +593,7 @@ bot.dialog('logoutDialog', function (session, args) {
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case 'logout':
+            case '/logout':
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
