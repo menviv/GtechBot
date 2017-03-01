@@ -68,6 +68,9 @@ var UserOrg;
 var UserID;
 var TicketID;
 var ResponseTimeFrameLabel;
+var OrgType;
+var OrgName;
+var OrgID;
 
 
 
@@ -683,9 +686,85 @@ bot.dialog('/myTickets', [
 
 
 
+bot.dialog('adminDialog', function (session, args) {
+    session.endDialog( ": Admin mode: " + args.topic);
+
+    if (args.topic == 'CreateNewOrg') {
+
+        session.endDialog();
+
+        session.beginDialog("/CreateNewOrg");
+
+    }
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case '/createorg':
+                // You can trigger the action with callback(null, 1.0) but you're also
+                // allowed to return additional properties which will be passed along to
+                // the triggered dialog.
+                callback(null, 1.0, { topic: 'CreateNewOrg' });
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
 
 
 
+bot.dialog('/CreateNewOrg', [
+    function (session) {
+
+        builder.Prompts.choice(session, "Organization type?", ["Business", "Filantropic", "Else"]);
+
+    },
+    function (session, results) {
+
+        OrgType = results.response.entity;
+
+        session.endDialog();
+
+        session.beginDialog("/DefineNewOrgName");
+            
+    }
+]);
+
+bot.dialog('/DefineNewOrgName', [
+    function (session) {
+
+        builder.Prompts.text(session, "Name of organization:");
+
+    },
+    function (session, results) {
+
+        OrgName = results.response;
+
+        OrgID = new mongo.ObjectID(); 
+
+            var NewOrgRecord = {
+                'CreatedTime': LogTimeStame,
+                'CreatedByUserID': UserID,
+                '_id': OrgID,
+                'Type':OrgType,
+                'Name':OrgName,
+                'Status':'pending'
+            }    	
+            
+            collOrgs.insert(NewOrgRecord, function(err, result){
+
+            });
+
+
+        session.endDialog();
+
+        session.beginDialog("/AdminActions");
+            
+    }
+]);
 
 
 
