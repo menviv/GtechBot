@@ -76,7 +76,7 @@ bot.on('trigger', function (message) {
 });
 
 
-
+/*
 var instructions = 'Welcome to BuilderBot! This is an ALPHA version for a mighty efficiant Bot to scale the process of planning a new bot or to enhance an existing one. to showcase the DirectLine: Send \'myBot\' to see the list of questions or \'myUsers\' to see how the list of regitered users. Any other message will be echoed.';
 
 bot.on('conversationUpdate', function (activity) {
@@ -92,7 +92,7 @@ bot.on('conversationUpdate', function (activity) {
     }
 });
 
-
+*/
 
 
 
