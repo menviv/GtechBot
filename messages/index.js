@@ -577,7 +577,16 @@ bot.dialog('restartDialog', function (session, args) {
 });
 
 bot.dialog('logoutDialog', function (session, args) {
-    session.endDialog(args.topic + ": This bot will restart the session.");
+    session.endDialog(args.topic + ": This bot will log you out from the session.");
+
+    if (args.topic == 'logout') {
+
+        session.endConversation();
+
+        session.beginDialog("/");
+
+    }
+
 }).triggerAction({ 
     onFindAction: function (context, callback) {
         // Recognize users utterance
@@ -586,9 +595,7 @@ bot.dialog('logoutDialog', function (session, args) {
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
-                callback(null, 1.0, { topic: 'Signinning out...' });
-                session.endConversation();
-                session.beginDialog("/");
+                callback(null, 1.0, { topic: 'logout' });
                 break;
             default:
                 callback(null, 0.0);
