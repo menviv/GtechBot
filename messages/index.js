@@ -443,6 +443,8 @@ bot.dialog('/location', [
 
             session.userData.engagementReason = destination;
 
+            session.replaceDialog("/location", { location: destination });
+
            // session.endDialog("Let's start by creating PROMPTS based question. My advice is to ask short and simplae questions. Example: what is your name?"); 
 
             //session.beginDialog('/pathNew_Prompts');
@@ -455,6 +457,8 @@ bot.dialog('/location', [
             session.send("Good to know! now I have a context and might be able to quickly answer any of your questions.");
 
             session.userData.engagementReasonAppType = destination;
+
+            session.replaceDialog("/location", { location: destination });
 
         } else if (destination == 'urgentques' || destination == 'normalques') {
 
