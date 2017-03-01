@@ -450,12 +450,7 @@ bot.dialog('/location', [
 
             session.userData.engagementReason = destination;
 
-            session.replaceDialog("/location", { location: destination });
-
-           // session.endDialog("Let's start by creating PROMPTS based question. My advice is to ask short and simplae questions. Example: what is your name?"); 
-
-            //session.beginDialog('/pathNew_Prompts');
-            
+            session.replaceDialog("/location", { location: destination });       
 
         } else if (destination == 'prodapp' || destination == 'devapp' || destination == 'newcr') {
 
@@ -487,13 +482,11 @@ bot.dialog('/location', [
 
             session.beginDialog("/getUserQuestion");
 
-        } else if (destination == 'myPaths') {
+        } else if (destination == 'mytickets') {
 
-            session.sendTyping();
+            session.endDialog();
 
-          //  session.endDialog();
-
-            session.beginDialog("myPaths");
+            session.beginDialog("/myTickets");
 
         }
         
