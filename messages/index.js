@@ -431,7 +431,7 @@ bot.dialog('/location', [
 
         session.send("Got it... " + destination);
 
-        if (destination != 'pathAddNew') {
+        if (destination == 'next') {
 
             session.replaceDialog("/location", { location: destination });
 
