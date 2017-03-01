@@ -11,6 +11,7 @@ var moment = require('moment');
 var fs = require('fs');
 var DateFormat = "DD-MM-YYYY HH:mm:ss";
 var LogTimeStame = moment().format(DateFormat); 
+var nodemailer = require('nodemailer');
 
 // Initialize mongo integration must
 
@@ -611,7 +612,7 @@ bot.dialog('logoutDialog', function (session, args) {
 
 
 bot.dialog('myticketsDialog', function (session, args) {
-    session.endDialog(args.topic + ": This bot will log you out from the session.");
+    session.endDialog("This function will print out the list of your tickets");
 
     if (args.topic == '/mytickets') {
 
@@ -687,7 +688,8 @@ bot.dialog('/myTickets', [
 
 
 bot.dialog('adminDialog', function (session, args) {
-    session.endDialog( ": Admin mode: " + args.topic);
+
+    session.endDialog( "Admin mode: " + args.topic);
 
     if (args.topic == 'CreateNewOrg') {
 
@@ -715,7 +717,6 @@ bot.dialog('adminDialog', function (session, args) {
 });
 
 
-
 bot.dialog('/CreateNewOrg', [
     function (session) {
 
@@ -725,6 +726,47 @@ bot.dialog('/CreateNewOrg', [
     function (session, results) {
 
         OrgType = results.response.entity;
+
+        session.endDialog();
+
+        session.beginDialog("/DefineNewOrgName");
+            
+    }
+]);
+
+
+
+
+
+bot.dialog('/AdminActions', [
+    function (session) {
+
+        builder.Prompts.choice(session, "Administrator functions?", ["Create New Org", "Create New User", "Open Tickets"]);
+
+    },
+    function (session, results) {
+
+        var adminActions = results.response.entity;
+
+        if (adminActions == 'Create New Org') {
+
+            session.endDialog();
+
+            session.beginDialog("/CreateNewOrg");
+
+        } else if (adminActions == 'Create New User') {
+
+            session.endDialog();
+
+            session.beginDialog("/CreateNewUser");
+            
+        } else if (adminActions == 'Open Tickets') {
+
+            session.endDialog();
+
+            session.beginDialog("/opentickets");
+            
+        }
 
         session.endDialog();
 
