@@ -138,17 +138,17 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        builder.Prompts.text(session, "Welcome to Gtech support channel, my name is SupBot and I will do my best to assist you.");
+        session.send("Welcome to Gtech support channel, my name is SupBot and I will do my best to assist you.");
 
         session.sendTyping();
 
-        builder.Prompts.text(session, "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup12345' ");
+        session.send( "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup12345' ");
 
-        //session.sendTyping();
+        session.sendTyping();
 
-        builder.Prompts.text(session, "Let's start with a simple registration, ok? ");
+        session.send("Let's start with a simple registration... ");
 
-        //session.sendTyping();
+        session.sendTyping();
 
         builder.Prompts.text(session, "Your email is: ");
 
