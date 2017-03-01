@@ -655,19 +655,11 @@ bot.dialog('/myTickets', [
                 throw err;
             if (doc === null) {
 
-
                var nresultLen = result.length;
-
-               var HTMLcode = "<html><head><title>My Paths for ChatBot</title></head><body><div class='DialogTitle'>My chatbot paths</div><div class='DialogChatbot' id='ChatBotBody'></div></body></html>";
-
-               var HTMLresponse;
-
 
                for (var i=0; i<nresultLen; i++ ) {
 
-                   HTMLresponse += "<div class='DialogChatbotPath'>" + result[i].ObjectTxt + "</div>";
-
-                   session.send("results: " + HTMLresponse);
+                   session.send("results: " + result[i].ObjectTxt + " | " +  result[i].ObjectNo);
 
                }
 
