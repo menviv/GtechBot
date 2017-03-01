@@ -456,8 +456,6 @@ bot.dialog('/location', [
 
             session.userData.engagementReasonAppType = destination;
 
-            session.beginDialog("/pathNew_Prompts_Answers");
-
         } else if (destination == 'urgentques' || destination == 'normalques') {
 
             session.sendTyping();
