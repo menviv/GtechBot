@@ -576,6 +576,27 @@ bot.dialog('restartDialog', function (session, args) {
     } 
 });
 
+bot.dialog('logoutDialog', function (session, args) {
+    session.endDialog(args.topic + ": This bot will restart the session.");
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case 'logout':
+                // You can trigger the action with callback(null, 1.0) but you're also
+                // allowed to return additional properties which will be passed along to
+                // the triggered dialog.
+                callback(null, 1.0, { topic: 'Signinning out...' });
+                session.endConversation();
+                session.beginDialog("/");
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
+
 
 
 
