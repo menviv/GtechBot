@@ -54,6 +54,17 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
 
 var bot = new builder.UniversalBot(connector);
 
+
+
+
+var UserEmail;
+var UserName;
+var UserOrg;
+var UserID;
+
+
+
+
 // Intercept trigger event (ActivityTypes.Trigger)
 bot.on('trigger', function (message) {
     // handle message from trigger function
@@ -118,7 +129,21 @@ bot.dialog('/', [
 
     session.send(reply);
 
-        builder.Prompts.text(session, "Welcome to BuilderBot... I'm here to help you build and configure my son Bot :), but first: What's your email?");
+        session.sendTyping();
+
+        builder.Prompts.text(session, "Welcome to Gtech support channel, my name is SupBot and I will do my best to assist you.");
+
+        session.sendTyping();
+
+        builder.Prompts.text(session, "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup1234' ");
+
+        session.sendTyping();
+
+        builder.Prompts.text(session, "Let's start with a simple registration, ok? ");
+
+        session.sendTyping();
+
+        builder.Prompts.text(session, "Your email is: ");
 
     },
     function (session, results) {
@@ -127,13 +152,13 @@ bot.dialog('/', [
 
         session.userData.email = UserEmail;
 
-        session.send("Thank you" + UserEmail);
+        session.send("Thank you");
 
         AllocateUserEmail();
 
         function AllocateUserEmail() {
                 
-                var cursor = collUsers.find({"UserEmail": UserEmail});
+                var cursor = collUsers.find({"Email": UserEmail});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
@@ -149,8 +174,8 @@ bot.dialog('/', [
 
                             UserExistsByEmail();
 
-                            UserName = result[0].UserName;
-                            UserGoal = result[0].UserGoal;
+                            UserName = result[0].Name;
+                            UserOrg = result[0].Org;
                             UserID = result[0]._id;
 
                         }
@@ -191,8 +216,8 @@ bot.dialog('/', [
 
             session.userData.email = results.response;
             session.userData.name = UserName;
-            session.userData.goal = UserGoal;
-            builder.Prompts.text(session, "Good to have you back with me! Are you ready to scale your bot?"); 
+            session.userData.Org = UserOrg;
+            builder.Prompts.text(session, "Good to have you back with me!"); 
 
          }
 
@@ -204,14 +229,14 @@ bot.dialog('/', [
         UserName = results.response;
         session.userData.name = UserName;
 
-        builder.Prompts.choice(session, "Bots are the obvious method to create valuble discussion with the new users, what do you want to scale??", ["discussion", "Conversion $", "Presense"]);
+        builder.Prompts.choice(session, "One quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888"]);
     },
 
     function (session, results) {
 
-        UserGoal = results.response.entity;
+        UserOrg = results.response.entity;
 
-        session.userData.goal = UserGoal;
+        session.userData.Org = UserOrg;
 
         RegisterNewUser();
 
@@ -219,16 +244,14 @@ bot.dialog('/', [
 
             UserID = new mongo.ObjectID(); 
 
-            session.send("Got it... " + UserID);
-
             var UserRecord = {
                 'CreatedTime': LogTimeStame,
                 '_id': UserID,
                 'CreatedBy':'admin',
                 'ObjectType':'UserRecord',
-                'UserName':UserName,
-                'UserEmail':UserEmail,
-                'UserGoal':UserGoal,
+                'Name':UserName,
+                'Email':UserEmail,
+                'Org':UserOrg,
                 'ObjectFormat':'txt',
                 'Status':'draft'
             }    	
@@ -237,24 +260,11 @@ bot.dialog('/', [
 
                 session.userData.userid = UserID;
 
-                //AllocateUserData();
-
-               // session.send("New user created: " + result);
-               
-
             });
 
 
+            session.send("Thank you for sharing this information with me."); 
 
-            //session.send("New user created1: " + UserID);
-
-            //session.send("New user created2: " + session.userData.userid);
-
-            session.send("Thank you for sharing this information with me. Ready to start your first bot?"); 
-
-           // session.send("Got it... " + session.userData.name + 
-           // " your email address is: " + session.userData.email + 
-           // " and your bot will help you increase  " + session.userData.goal + ".");
             session.beginDialog("/location", { location: "path" });
 
         }
@@ -271,6 +281,176 @@ bot.dialog('/', [
     bot.dialog('checkoutDialog', function (session) {
         session.send("Got it... ");
     });
+
+
+
+
+
+var paths = {
+
+    "path": { 
+        description: "So now, how can I help you?",
+        commands: { "I have a question": "question", "I have a technical problem": "support", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
+    },
+
+    "question": { 
+        description: "Your question is related to:",
+        commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
+    },  
+
+            "prodapp": { 
+                description: "What is the severity of your question?",
+                commands: { "Urgent": "p_urgentques", "Normal": "p_normalques"  }
+            },  
+
+            "devapp": { 
+                description: "What is the severity of your question?",
+                commands: { "Urgent": "d_urgentques", "Normal": "d_normalques"  }
+            },   
+
+             "newcr": { 
+                description: "What is the severity of your question?",
+                commands: { "Urgent": "c_urgentques", "Normal": "c_normalques"  }
+            },                            
+
+    "support": { 
+        description: "Would you like to add another answers?",
+        commands: { "yes": "pathNew_Prompts_Answers", "no": "myPaths"  }
+    },
+
+    "brainstorm": { 
+        description: "Would you like to add another answers?",
+        commands: { "yes": "pathNew_Prompts_Answers", "no": "myPaths"  }
+    },  
+
+    "callmeback": { 
+        description: "Would you like to add another answers?",
+        commands: { "yes": "pathNew_Prompts_Answers", "no": "myPaths"  }
+    },      
+
+            "tzipi51": { 
+                description: "אני מדברת המון בחוגי הבית על הנושאים העכשוויים וגם קצת על ישראל ביום שאחרי",
+                commands: { "רוצה לשמוע עוד": "tzipi3000", "פחות מתחבר/ת": "tzipi2000"  }
+            },  
+
+            "tzipi52": { 
+                description: "ציפי לבני על פינוי עמונה: מותר לבקר פסק דין אבל אסור להפוך את בית המשפט לאויב",
+                commands: { "https://www.youtube.com/watch?v=kclPkykTGsY": "tzipi521", "רוצה לשמוע עוד": "tzipi3000", "פחות מתחבר/ת": "tzipi2000"  }
+            },
+
+            "tzipi53": { 
+                description: "המסר האחרון שלי היה: ראש הממשלה יודע שחוק ההסדרה רע לישראל ומתפלל שבגצ יפסול אותו",
+                commands: { "https://soundcloud.com/tzipi-livni/kdirjxyipjrx": "tzipi531", "רוצה לשמוע עוד": "tzipi3000", "פחות מתחבר/ת": "tzipi2000"  }
+            },            
+                          
+
+    "tzipi10": { 
+        description: "תראו, אני מתכננת לגעת בכמה נושאים מורכבים כשאבחר, מה הכי מדבר אליכם?",
+        commands: { "ניהול תהליך מדיני כדי לשמור על אופייה של ישראל יהודית ודמוקרטית": "tzipi1103", "שקיפות בקרן קיימת לישראל": "tzipi1103", "הנהגת סוף השבוע הארוך": "tzipi1103", "לא מתחבר/ת": "tzipi1103", "הכל": "tzipi4000"  }
+    },
+
+     "tzipi1103": { 
+        description: "האמת שאני מתלבטת, רוצים לעזור לי להתמקד בעוד משהו מהותי?",
+        commands: { "כן": "tzipi11031", "פחות": "tzipi2000", "בא לי להצטרף למאבק שלך": "tzipi3000", "תודה ולהתראות": "tzipi1000" }
+     },    
+
+            "tzipi11031": { 
+                description: "או קיי, אז אני מתכננת להוביל את הקמת גוף נציבות הביקורת על הפרקליטות?",
+                commands: { "הגיע הזמן!": "tzipi110311", "זה לא יעבוד...": "tzipi2000", "בא לי להצטרף למאבק שלך": "tzipi3000", "תודה ולהתראות": "tzipi1000" }
+            },
+
+                    "tzipi110311": { 
+                        description: "וואלה? מתוך חיבור אישי?",
+                        commands: { "כן": "tzipi1103111", "לא": "tzipi4000", "הסיבות שלי שמורות איתי": "tzipi4000" }
+                    },
+            
+
+    "tzipi20": { 
+        description: "הגיע הזמן לבנות מחנה דמוקרטי רחב שיהווה אלטרנטיבה לשלטון הימין, נכון?",
+        commands: { "מדויק": "tzipi201", "רוצים להצטרף למאבק עכשיו!": "tzipi3000" }
+    },
+
+
+            "tzipi201": { 
+                description: "כל מי שישראל היהודית, הדמוקרטית, המתונה, שמשלבת בין פעולה ביטחונית למהלך מדיני, יקרה ללבו - חייב להתאחד עכשיו.",
+                commands: { "לגמרי!": "tzipi4000", "המסר הזה קצת באוויר בשבילי": "tzipi10" }
+            },
+            
+
+     "tzipi1000": {
+        description: "מצפה לראותך תומך בקלפי",
+        commands: { "אולי...": "tzipi4000", "פחות, בהצלחה ולהתראות": "tzipi1000" }
+    },    
+
+    "tzipi2000": {
+        description: "אז יאללה, נתחיל מהתחלה?",
+        commands: { "כן": "tzipi0", "מעדיפים פשוט לדבר עם מישהו": "tzipi3000", "פחות, בהצלחה ולהתראות": "tzipi1000" }
+    },                         
+
+    "tzipi3000": {
+        description: "מעולה! אז אשמח אם תשאירו פרטים בטופס הבא:",
+        commands: { "http://lp.vp4.me/rhrt": "tzipi3001", "תודה ולהתראות": "tzipi1000" }
+    }, 
+
+    "tzipi4000": {
+        description: "בא לכם לשמוע קצת יותר על הפעילות שלי??",
+        commands: { "בכייף": "tzipi3000", "תודה ולהתראות": "tzipi1000" }
+    },     
+  
+}
+
+
+
+
+
+
+bot.dialog('/location', [
+    function (session, args) {
+        var location = paths[args.location];
+        session.dialogData.commands = location.commands;
+        builder.Prompts.choice(session, location.description, location.commands);
+    },
+    
+    function (session, results) {
+
+        session.sendTyping();
+        
+        var destination = session.dialogData.commands[results.response.entity];
+
+        session.send("Got it... " + destination);
+
+        if (destination != 'pathAddNew') {
+
+            session.replaceDialog("/location", { location: destination });
+
+        } else if (destination == 'pathAddNew') {
+
+            session.sendTyping();
+
+           // session.endDialog("Let's start by creating PROMPTS based question. My advice is to ask short and simplae questions. Example: what is your name?"); 
+
+            session.beginDialog('/pathNew_Prompts');
+            
+
+        } else if (destination == 'pathNew_Prompts_Answers') {
+
+            //session.endDialog();
+
+            session.beginDialog("/pathNew_Prompts_Answers");
+
+        } else if (destination == 'myPaths') {
+
+            session.sendTyping();
+
+          //  session.endDialog();
+
+            session.beginDialog("myPaths");
+
+        }
+        
+    }
+]);
+
 
 
 
