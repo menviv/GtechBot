@@ -179,7 +179,7 @@ bot.dialog('/', [
 
                         if (result.length < 1) {
 
-                            NonRegisteredUser();
+                            builder.Prompts.text(session, "And you name?"); 
 
                         } else {
 
@@ -187,9 +187,37 @@ bot.dialog('/', [
                             UserOrg = result[0].Org;
                             UserID = result[0]._id;
 
-                            session.send("Good to have you back with me " + UserName + "!"); 
+                            GetUserTicketingInfo();
 
-                            session.beginDialog("/location", { location: "path" });                            
+                            function GetUserTicketingInfo() {
+
+                                    var cursor = collTickets.find({"UserID": UserID});
+                                    var result = [];
+                                    cursor.each(function(err, doc) {
+                                        if(err)
+                                            throw err;
+                                        if (doc === null) {
+
+                                            var nresultLen = result.length;
+
+                                            SendInfoToExistingUser(nresultLen);
+
+                                            return;
+                                        }
+                                        // do something with each doc, like push Email into a results array
+                                        result.push(doc);
+                                    });
+
+
+                            }
+
+                            function SendInfoToExistingUser() {
+
+                                session.send("Good to have you back with me " + UserName + "! You have " + nresultLen + " open tickets must be resolved."); 
+
+                                session.beginDialog("/location", { location: "path" });
+
+                            }                            
 
                         }  //ghjgjgjgh
                         
@@ -199,30 +227,6 @@ bot.dialog('/', [
                     result.push(doc);
                 });
             
-        }
-
-
-        function NonRegisteredUser() {
-            /*
-            var UserRecord = {
-                'CreatedTime': LogTimeStame,
-                'CreatedBy':'admin',
-                'ObjectType':'UserRecord',
-                'UserEmail':UserEmail,
-                'ObjectFormat':'txt',
-                'Status':'draft'
-            }    	
-            
-            collUsers.insert(UserRecord, function(err, result){
-                //session.userData.userid = result._id;
-                UserID = result._id;
-                session.send("New user created: " + result._id);
-                //session.userData.email = UserEmail;
-            });
-            */
-
-            builder.Prompts.text(session, "And you name?"); 
-
         }
 
         function UserExistsByEmail() {
