@@ -660,11 +660,9 @@ bot.dialog('/myTickets', [
 
                var nresultLen = result.length;
 
-               session.send("results: " + nresultLen);
-
                for (var i=0; i<nresultLen; i++ ) {
 
-                   session.send("results: " + result[i].ObjectTxt + " | " +  result[i].ObjectNo);
+                   session.send("results: " + result[i].ObjectTxt + " | " +  result[i].ObjectNo + " | " +  result[i].Status);
 
                }
 
