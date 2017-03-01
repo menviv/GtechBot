@@ -189,7 +189,7 @@ bot.dialog('/', [
                             UserOrg = result[0].Org;
                             UserID = result[0]._id;
 
-                        }
+                        }  //ghjgjgjgh
                         
                         return;
                     }
@@ -225,10 +225,9 @@ bot.dialog('/', [
 
         function UserExistsByEmail() {
 
-            session.userData.email = results.response;
-            session.userData.name = UserName;
-            session.userData.Org = UserOrg;
             builder.Prompts.text(session, "Good to have you back with me!"); 
+
+            session.beginDialog("/location", { location: "path" });
 
          }
 
