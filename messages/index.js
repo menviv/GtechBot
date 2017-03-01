@@ -52,7 +52,12 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
     openIdMetadata: process.env['BotOpenIdMetadata']
 });
 
-var bot = new builder.UniversalBot(connector);
+
+//var bot = new builder.UniversalBot(connector);
+
+var bot = new builder.UniversalBot(connector, function (session) {
+    session.send("You said: '%s'. Try asking for 'help'.", session.message.text);
+});
 
 
 
@@ -139,11 +144,11 @@ bot.dialog('/', [
 
         builder.Prompts.text(session, "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup12345' ");
 
-        session.sendTyping();
+        //session.sendTyping();
 
         builder.Prompts.text(session, "Let's start with a simple registration, ok? ");
 
-        session.sendTyping();
+        //session.sendTyping();
 
         builder.Prompts.text(session, "Your email is: ");
 
@@ -530,6 +535,26 @@ bot.dialog('/getUserQuestion', [
         }
     }
 ]);
+
+
+bot.dialog('helpDialog', function (session, args) {
+    session.endDialog(args.topic + ": This bot will echo back anything you say.");
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case 'help':
+                // You can trigger the action with callback(null, 1.0) but you're also
+                // allowed to return additional properties which will be passed along to
+                // the triggered dialog.
+                callback(null, 1.0, { topic: 'general' });
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
 
 
 
