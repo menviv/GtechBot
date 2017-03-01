@@ -443,6 +443,8 @@ bot.dialog('/location', [
 
             session.userData.engagementReason = destination;
 
+            session.replaceDialog("/location", { location: destination });
+
            // session.endDialog("Let's start by creating PROMPTS based question. My advice is to ask short and simplae questions. Example: what is your name?"); 
 
             //session.beginDialog('/pathNew_Prompts');
