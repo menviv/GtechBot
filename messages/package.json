@@ -1,19 +1,29 @@
 {
-  "name": "emptybot",
+  "name": "gtechbot",
   "version": "1.0.0",
-  "description": "",
+  "description": "Gtech support support Bot",
   "main": "index.js",
   "dependencies": {
+    "azure-storage": "^1.3.2",
     "botbuilder": "^3.4.2",
     "botbuilder-azure": "0.0.1",
-    "azure-storage": "^1.3.2"
+    "fs": "0.0.1-security",
+    "moment": "^2.17.1",
+    "mongodb": "^2.2.24"
   },
   "devDependencies": {
-      "restify": "^4.1.1"
-  },  
+    "restify": "^4.1.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "author": "Menashe Gezelkopy",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "gtechbot"
+  },
+  "keywords": [
+    "Bot"
+  ]
 }
