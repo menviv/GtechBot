@@ -607,6 +607,97 @@ bot.dialog('logoutDialog', function (session, args) {
 });
 
 
+bot.dialog('myticketsDialog', function (session, args) {
+    session.endDialog(args.topic + ": This bot will log you out from the session.");
+
+    if (args.topic == '/mytickets') {
+
+        session.endDialog();
+
+        session.beginDialog("/myTickets");
+
+    }
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case '/mytickets':
+                // You can trigger the action with callback(null, 1.0) but you're also
+                // allowed to return additional properties which will be passed along to
+                // the triggered dialog.
+                callback(null, 1.0, { topic: 'mytickets' });
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
+
+
+
+
+
+
+
+
+
+bot.dialog('/myTickets', [
+    function (session) {
+
+        session.send("Your tickets: ");
+
+        var cursor = collTickets.find({"UserID": UserID});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+            if (doc === null) {
+
+
+               var nresultLen = result.length;
+
+               var HTMLcode = "<html><head><title>My Paths for ChatBot</title></head><body><div class='DialogTitle'>My chatbot paths</div><div class='DialogChatbot' id='ChatBotBody'></div></body></html>";
+
+               var HTMLresponse;
+
+
+               for (var i=0; i<nresultLen; i++ ) {
+
+                   HTMLresponse += "<div class='DialogChatbotPath'>" + result[i].ObjectTxt + "</div>";
+
+                   session.send("results: " + HTMLresponse);
+
+               }
+
+                return;
+            }
+            // do something with each doc, like push Email into a results array
+            result.push(doc);
+        });        
+
+       // builder.Prompts.choice(session, "Would you like to add another answers?", ["Yes", "Review My Paths", "No"]);
+
+       // builder.Prompts.choice(session, "Which region would you like sales for?", salesData); 
+    },
+    function (session, results) {
+
+
+            
+    }
+]);
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*
