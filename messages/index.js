@@ -15,7 +15,7 @@ var LogTimeStame = moment().format(DateFormat);
 // Initialize mongo integration must
 
 var mongo = require('mongodb');
-var connString = 'mongo ds111940.mlab.com:11940/gtechbot -u gtech-p gtech';
+var connString = 'mongodb://gtech:gtech@ds111940.mlab.com:11940/gtechbot';
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var dbm;
