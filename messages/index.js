@@ -429,8 +429,6 @@ bot.dialog('/location', [
         
         var destination = session.dialogData.commands[results.response.entity];
 
-        session.send("Got it... " + destination);
-
         if (destination == 'next') {
 
             session.replaceDialog("/location", { location: destination });
@@ -457,6 +455,8 @@ bot.dialog('/location', [
             session.send("Good to know! now I have a context and might be able to quickly answer any of your questions.");
 
             session.userData.engagementReasonAppType = destination;
+
+            session.replaceDialog("/location", { location: destination });
 
         } else if (destination == 'urgentques' || destination == 'normalques') {
 
