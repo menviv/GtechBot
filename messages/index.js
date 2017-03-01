@@ -202,7 +202,7 @@ bot.dialog('/', [
 
                                             SendInfoToExistingUser(nresultLen);
 
-                                            return;
+                                            //return;
                                         }
                                         // do something with each doc, like push Email into a results array
                                         result.push(doc);
