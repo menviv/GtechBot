@@ -20,7 +20,7 @@ var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var dbm;
 var collResponses;
-var collTickes;
+var collTickets;
 var collCategories;
 var collOrgs;
 var collUsers;
@@ -33,7 +33,7 @@ mongo.MongoClient.connect(connString, function(err, database) {
   dbm = database;
 
   collResponses = dbm.collection('Responses');
-  collTickes = dbm.collection('Tickes');
+  collTickets = dbm.collection('Tickets');
   collCategories = dbm.collection('Categories');
   collOrgs = dbm.collection('Orgs');
   collUsers = dbm.collection('Users');
@@ -61,6 +61,8 @@ var UserEmail;
 var UserName;
 var UserOrg;
 var UserID;
+var TicketID;
+var ResponseTimeFrameLabel;
 
 
 
@@ -135,7 +137,7 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        builder.Prompts.text(session, "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup1234' ");
+        builder.Prompts.text(session, "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup12345' ");
 
         session.sendTyping();
 
@@ -293,6 +295,11 @@ var paths = {
         commands: { "I have a question": "question", "I have a technical problem": "support", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
     },
 
+    "repath": { 
+        description: "Anyhing else I can I help you with?",
+        commands: { "I have a question": "question", "I have a technical problem": "support", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
+    },    
+
     "question": { 
         description: "Your question is related to:",
         commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
@@ -300,17 +307,17 @@ var paths = {
 
             "prodapp": { 
                 description: "What is the severity of your question?",
-                commands: { "Urgent": "p_urgentques", "Normal": "p_normalques"  }
+                commands: { "Urgent": "urgentques", "Normal": "normalques"  }
             },  
 
             "devapp": { 
                 description: "What is the severity of your question?",
-                commands: { "Urgent": "d_urgentques", "Normal": "d_normalques"  }
+                commands: { "Urgent": "urgentques", "Normal": "normalques"  }
             },   
 
              "newcr": { 
                 description: "What is the severity of your question?",
-                commands: { "Urgent": "c_urgentques", "Normal": "c_normalques"  }
+                commands: { "Urgent": "urgentques", "Normal": "normalques"  }
             },                            
 
     "support": { 
@@ -423,20 +430,48 @@ bot.dialog('/location', [
 
             session.replaceDialog("/location", { location: destination });
 
-        } else if (destination == 'pathAddNew') {
+        } else if (destination == 'question') {
 
             session.sendTyping();
 
+            session.send("Got it, you have question");
+
+            session.userData.engagementReason = destination;
+
            // session.endDialog("Let's start by creating PROMPTS based question. My advice is to ask short and simplae questions. Example: what is your name?"); 
 
-            session.beginDialog('/pathNew_Prompts');
+            //session.beginDialog('/pathNew_Prompts');
             
 
-        } else if (destination == 'pathNew_Prompts_Answers') {
+        } else if (destination == 'prodapp' || destination == 'devapp' || destination == 'newcr') {
 
-            //session.endDialog();
+            session.sendTyping();
+
+            session.send("Good to know! now I have a context and might be able to quickly answer any of your questions.");
+
+            session.userData.engagementReasonAppType = destination;
 
             session.beginDialog("/pathNew_Prompts_Answers");
+
+        } else if (destination == 'urgentques' || destination == 'normalques') {
+
+            session.sendTyping();
+
+            session.send("Ok thanks, now I can repriorities my other tasks..");
+
+                if (destination == 'urgentques') {
+
+                    ResponseTimeFrameLabel = "the next 4 hours ";
+
+                } else {
+
+                    ResponseTimeFrameLabel = "by the next following day ";
+
+                }
+
+            session.userData.engagementReasonSevirityLevel = destination;
+
+            session.beginDialog("/getUserQuestion");
 
         } else if (destination == 'myPaths') {
 
@@ -453,6 +488,48 @@ bot.dialog('/location', [
 
 
 
+bot.dialog('/getUserQuestion', [
+    function (session) {
+
+            builder.Prompts.text(session, "So... what are you waiting for? ask me anything... "); 
+
+    },
+    function (session, results) {
+
+        if (results.response) {
+
+            TicketID = new mongo.ObjectID(); 
+
+            var TicketNo = Math.floor(Math.random()*90000) + 10000;
+
+            var TicketRecord = {
+                'CreatedTime': LogTimeStame,
+                'UserID': UserID,
+                '_id': TicketID,
+                'CreatedBy':UserName,
+                'CreatedByEmail':UserEmail,
+                'ObjectNo':TicketNo,
+                'ObjectType':'Question',
+                'ObjectFormat':'txt',
+                'ObjectTxt':results.response,
+                'Status':'draft'
+            }    	
+            
+            collTickets.insert(TicketRecord, function(err, result){
+
+            });
+
+            session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
+
+            session.endDialog();
+
+            session.beginDialog("/location", { location: "repath" });
+            
+        } else {
+            session.send("ok");
+        }
+    }
+]);
 
 
 
