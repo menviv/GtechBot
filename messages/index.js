@@ -582,7 +582,8 @@ bot.dialog('restartDialog', function (session, args) {
 });
 
 bot.dialog('logoutDialog', function (session, args) {
-    session.endDialog(args.topic + ": This bot will log you out from the session.");
+    
+    session.endDialog("GtechBot is logging out");
 
     if (args.topic == 'logout') {
 
