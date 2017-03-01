@@ -183,11 +183,13 @@ bot.dialog('/', [
 
                         } else {
 
-                            UserExistsByEmail();
-
                             UserName = result[0].Name;
                             UserOrg = result[0].Org;
                             UserID = result[0]._id;
+
+                            session.send("Good to have you back with me " + UserName + "!"); 
+
+                            session.beginDialog("/location", { location: "path" });                            
 
                         }  //ghjgjgjgh
                         
@@ -582,7 +584,7 @@ bot.dialog('restartDialog', function (session, args) {
 });
 
 bot.dialog('logoutDialog', function (session, args) {
-    
+
     session.endDialog("GtechBot is logging out");
 
     if (args.topic == 'logout') {
