@@ -706,6 +706,10 @@ bot.dialog('myticketsDialog', function (session, args) {
 bot.dialog('/myTickets', [
     function (session) {
 
+
+    },
+    function (session, results) {
+
         session.send("Your tickets: ");
 
         var cursor = collTickets.find({"UserID": UserID});
@@ -727,15 +731,7 @@ bot.dialog('/myTickets', [
             }
             // do something with each doc, like push Email into a results array
             result.push(doc);
-        });        
-
-       // builder.Prompts.choice(session, "Would you like to add another answers?", ["Yes", "Review My Paths", "No"]);
-
-       // builder.Prompts.choice(session, "Which region would you like sales for?", salesData); 
-    },
-    function (session, results) {
-
-
+        });  
             
     }
 ]);
