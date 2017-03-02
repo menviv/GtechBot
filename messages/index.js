@@ -640,7 +640,7 @@ bot.dialog('/myTickets', [
 
                for (var i=0; i<nresultLen; i++ ) {
 
-                   session.send("results: " + result[i].ObjectTxt + " | " +  result[i].ObjectNo + " | " +  result[i].Status);
+                   session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " +  result[i].ObjectNo + " | " +  result[i].Status);
 
                }
 
@@ -653,10 +653,10 @@ bot.dialog('/myTickets', [
     },
     function (session, results) {
 
-        session.send("Your tickets: ");
+            session.endDialog();
 
- 
-            
+            session.beginDialog("/location", { location: "path" });
+
     }
 ]);
 
@@ -667,10 +667,6 @@ bot.dialog('/myTickets', [
 
 bot.dialog('/myOpenTickets', [
     function (session) {
-      
-
-    },
-    function (session, results) {
 
         session.send("Your open tickets: ");
 
@@ -685,7 +681,7 @@ bot.dialog('/myOpenTickets', [
 
                for (var i=0; i<nresultLen; i++ ) {
 
-                   session.send("results: " + result[i].ObjectTxt + " | " +  result[i].ObjectNo + " | " +  result[i].Status);
+                   session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " +  result[i].ObjectNo + " | " +  result[i].Status);
 
                }
 
@@ -693,7 +689,14 @@ bot.dialog('/myOpenTickets', [
             }
             // do something with each doc, like push Email into a results array
             result.push(doc);
-        }); 
+        });      
+
+    },
+    function (session, results) {
+
+            session.endDialog();
+
+            session.beginDialog("/location", { location: "path" });
             
     }
 ]);
