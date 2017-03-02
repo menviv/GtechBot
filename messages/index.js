@@ -1257,7 +1257,9 @@ bot.dialog('/ticketPreview', [
 
                 var ticketNumberToHandle = session.userData.ticketNumberToHandle;
 
-                        var cursor = collTicketResponses.find({"TicketNo": ticketNumberToHandle});
+                var sticketNumberToHandle = ticketNumberToHandle.toString();
+
+                        var cursor = collTicketResponses.find({"TicketNo": sticketNumberToHandle});
                         var result = [];
                         cursor.each(function(err, doc) {
                             if(err)
@@ -1265,21 +1267,21 @@ bot.dialog('/ticketPreview', [
 
                             if (doc === null) {
 
-                            if (result.length > 0 ) {
+                                if (result.length > 0 ) {
 
-                                for (var i=0; i<result.length; i++ ) {
+                                    for (var i=0; i<result.length; i++ ) {
 
-                                    session.send("Response: " + result[i].ObjectTxt);
+                                        session.send("Response: " + result[i].ObjectTxt);
 
-                                    responses = responses + result[i].ObjectTxt + "<br />";
+                                        responses = responses + result[i].ObjectTxt + "<br />";
 
-                                }                                
+                                    }                                
 
-                            } else {
+                                } else {
 
-                                session.send("And after I checked, but I was unable to allocate any responses for this ticket ");
+                                    session.send("And after I checked, but I was unable to allocate any responses for this ticket ");
 
-                            }
+                                }
 
                                 return;
                             }
