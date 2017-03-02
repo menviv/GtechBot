@@ -77,6 +77,7 @@ var OrgType;
 var OrgName;
 var OrgID;
 var ResponseID;
+var numberOfTickets;
 
 
 
@@ -155,104 +156,33 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        builder.Prompts.text(session, "Let me just quickly find you on my lists... remind me, what is your email? ");
+        session.beginDialog("/validateUser"); 
 
     },
     function (session, results) {
 
-        UserEmail = results.response.toLocaleLowerCase();
-
-        session.userData.email = UserEmail;
-
-        session.send("Thank you");
-
-        AllocateUserEmail();
-
-        function AllocateUserEmail() {
-                
-                var cursor = collUsers.find({"Email": UserEmail});
-                var result = [];
-                cursor.each(function(err, doc) {
-                    if(err)
-                        throw err;
-                    if (doc === null) {
-                        // doc is null when the last document has been processed
-
-                        if (result.length < 1) {
-
-                            builder.Prompts.text(session, "And you name?"); 
-
-                        } else {
-
-                            session.userData.Authanticated = 'True';
-
-                            UserName = result[0].Name;
-                            UserOrg = result[0].Org;
-                            UserID = result[0]._id;
-
-                            GetUserTicketingInfo();
-
-                            function GetUserTicketingInfo() {
-
-                                    var cursor = collTickets.find({"UserID": UserID});
-                                    var result = [];
-                                    cursor.each(function(err, doc) {
-                                        if(err)
-                                            throw err;
-                                        if (doc === null) {
-
-                                            var numberOfTikets = result.length;
-
-                                            SendInfoToExistingUser(numberOfTikets);
-
-                                            //return;
-                                        }
-                                        // do something with each doc, like push Email into a results array
-                                        result.push(doc);
-                                    });
-
-
-                            }
-
-                            function SendInfoToExistingUser(numberOfTikets) {
-
-                                session.send("Good to have you back with me " + UserName + "! You have " + numberOfTikets + " open tickets must be resolved."); 
-
-                                session.beginDialog("/location", { location: "path" });
-
-                            }                            
-
-                        }  
-                        
-                        return;
-                    }
-                    // do something with each doc, like push Email into a results array
-                    result.push(doc);
-                });
-            
-        }
-
-        function UserExistsByEmail() {
-
-            builder.Prompts.text(session, "Good to have you back with me!"); 
+        if (session.userData.Authanticated == 'True') {
 
             session.beginDialog("/location", { location: "path" });
 
-         }
+        } else {
 
+            session.beginDialog("/RegisterUser"); 
 
+        }
 
     },    
     function (session, results) {
 
-        UserName = results.response;
-        session.userData.name = UserName;
+     //   UserName = results.response;
+     //   session.userData.name = UserName;
 
-        builder.Prompts.choice(session, "One last quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888", "Other"]);
+     //   builder.Prompts.choice(session, "One last quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888", "Other"]);
     },
 
     function (session, results) {
 
+/*
         UserOrg = results.response.entity;
 
         session.userData.Org = UserOrg;
@@ -290,18 +220,210 @@ bot.dialog('/', [
         }
 
 
-        
+   */     
 
         
 
     }
-]).beginDialogAction('checkoutAction', 'checkoutDialog', { matches: /checkout/i });
+]);
 
-// Dialog for checking out
-    bot.dialog('checkoutDialog', function (session) {
-        session.send("Got it... ");
-    });
 
+
+bot.dialog('/validateUser', [
+    function (session) {
+
+            builder.Prompts.text(session, "Let me just quickly find you on my lists... remind me, what is your email? ");
+
+    },
+    function (session, results) {
+
+        UserEmail = results.response.toLocaleLowerCase();
+
+        session.userData.email = UserEmail;
+
+        session.send("Thank you");
+
+        AllocateUserEmail();
+
+
+
+        function AllocateUserEmail() {
+                
+                var cursor = collUsers.find({"Email": UserEmail});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+                    if (doc === null) {
+                        // doc is null when the last document has been processed
+
+                        if (result.length < 1) {
+
+                            session.userData.Authanticated = 'False';
+
+                            //builder.Prompts.text(session, "And you name?"); 
+
+                        } else {
+
+                            session.userData.Authanticated = 'True';
+
+                            UserName = result[0].Name;
+                            UserOrg = result[0].Org;
+                            UserID = result[0]._id;
+
+                            GetUserTicketingInfo();                          
+
+                        }  
+                        
+                        return;
+                    }
+                    // do something with each doc, like push Email into a results array
+                    result.push(doc);
+                });
+            
+        }
+
+
+        function GetUserTicketingInfo() {
+
+                var cursor = collTickets.find({"UserID": UserID});
+                var result = [];
+                    cursor.each(function(err, doc) {
+                              if(err)
+                                    throw err;
+                              if (doc === null) {
+
+                                    numberOfTickets = result.length;
+
+                                    SendInfoToExistingUser(numberOfTickets);
+
+                              }
+                              result.push(doc);
+                    });
+
+
+        }
+
+        function SendInfoToExistingUser(numberOfTickets) {
+
+            if (session.userData.Authanticated == 'True') {
+
+               session.send("Good to have you back with me " + UserName + "! You have " + numberOfTickets + " open tickets must be resolved."); 
+
+               
+
+            } else {
+
+                session.send("I don't really know you...");
+
+            }
+
+            session.endDialog();
+
+        }         
+
+
+    }
+]);
+
+
+
+
+
+bot.dialog('/validateOrg', [
+    function (session) {
+
+            builder.Prompts.text(session, "Let me just quickly find you on my lists... remind me, what is your email? ");
+
+    },
+    function (session, results) {
+
+        UserEmail = results.response.toLocaleLowerCase();
+
+        session.userData.email = UserEmail;
+
+        session.send("Thank you");
+
+        AllocateUserEmail();
+
+        
+
+        function AllocateUserEmail() {
+                
+                var cursor = collUsers.find({"Email": UserEmail});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+                    if (doc === null) {
+                        // doc is null when the last document has been processed
+
+                        if (result.length < 1) {
+
+                            builder.Prompts.text(session, "And you name?"); 
+
+                        } else {
+
+                            session.userData.Authanticated = 'True';
+
+                            UserName = result[0].Name;
+                            UserOrg = result[0].Org;
+                            UserID = result[0]._id;
+
+                            GetUserTicketingInfo();
+
+                            function GetUserTicketingInfo() {
+
+                                    var cursor = collTickets.find({"UserID": UserID});
+                                    var result = [];
+                                    cursor.each(function(err, doc) {
+                                        if(err)
+                                            throw err;
+                                        if (doc === null) {
+
+                                            var numberOfTickets = result.length;
+
+                                            SendInfoToExistingUser(numberOfTickets);
+
+                                            //return;
+                                        }
+                                        // do something with each doc, like push Email into a results array
+                                        result.push(doc);
+                                    });
+
+
+                            }
+
+                            function SendInfoToExistingUser(numberOfTickets) {
+
+                                session.send("Good to have you back with me " + UserName + "! You have " + numberOfTickets + " open tickets must be resolved."); 
+
+                                session.beginDialog("/location", { location: "path" });
+
+                            }                            
+
+                        }  
+                        
+                        return;
+                    }
+                    // do something with each doc, like push Email into a results array
+                    result.push(doc);
+                });
+            
+        }
+
+        function UserExistsByEmail() {
+
+            builder.Prompts.text(session, "Good to have you back with me!"); 
+
+            session.beginDialog("/location", { location: "path" });
+
+         }
+
+
+
+    }
+]);
 
 
 
@@ -1061,11 +1183,11 @@ bot.dialog('/respondToTicket', [
 
             session.userData.ticketNumberToHandle = ticketNO;  
 
-          //  builder.Prompts.text(session, "Your response will be:  ");   
+            builder.Prompts.text(session, "Your response will be:  ");   
 
         }
             
-    }/*,    
+    },    
     function (session, results) {
 
         var TicketResponse = results.response;
@@ -1094,7 +1216,7 @@ bot.dialog('/respondToTicket', [
             session.beginDialog("/ticketPreview");     
 
         
-    },*/
+    },
 ]);
 
 
