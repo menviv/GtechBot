@@ -1220,6 +1220,10 @@ bot.dialog('/ticketPreview', [
 
         var nticketNumberToHandle = parseInt(ticketNumberToHandle);
 
+        session.send("ticketNumberToHandle:" + ticketNumberToHandle);
+
+        session.send("nticketNumberToHandle:" + nticketNumberToHandle);
+
         
 
 
