@@ -148,7 +148,7 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        session.send( "You are welcome to skip the registration process by typing '/signin' or '/help' to get my personal assistance ");
+        session.send( "You are welcome to use my HOT KEYS to skip my over politeness, to review them just type '/help' ");
 
         session.sendTyping();
 
@@ -184,6 +184,8 @@ bot.dialog('/', [
                             builder.Prompts.text(session, "And you name?"); 
 
                         } else {
+
+                            session.userData.Authanticated = 'True';
 
                             UserName = result[0].Name;
                             UserOrg = result[0].Org;
@@ -985,28 +987,55 @@ bot.dialog('/adminAuthRequests', [
     },
     function (session, results) {
 
-        var AdmibRequestID = new mongo.ObjectID(); 
+        if (session.userData.Authanticated == 'True') {
 
-            var AdminReqRecord = {
-                'CreatedTime': LogTimeStame,
-                'RequestByUserID': UserID,
-                '_id': AdmibRequestID,
-                'Comments': results.response,
-                'RequestType':'adminAuth',
-                'Name':OrgName,
-                'Status':'pending'
-            }    	
-            
-            collAdminRequests.insert(AdminReqRecord, function(err, result){
+            var AdmibRequestID = new mongo.ObjectID(); 
 
-            });
+                var AdminReqRecord = {
+                    'CreatedTime': LogTimeStame,
+                    'RequestByUserID': UserID,
+                    '_id': AdmibRequestID,
+                    'Comments': results.response,
+                    'RequestType':'adminAuth',
+                    'Name':UserName,
+                    'Status':'pending'
+                }    	
+                
+                collAdminRequests.insert(AdminReqRecord, function(err, result){
 
-        session.send("Thank you, promise to complete this one as quickly as possible and get back to you with my decision. By 'quickly' I mean not more than 24 hours... ");
+                });
 
-        session.endDialog();
+            session.send("Thank you, promise to complete this one as quickly as possible and get back to you with my decision. By 'quickly' I mean not more than 24 hours... ");
 
-        session.beginDialog("/");
-            
+            session.endDialog();
+
+            session.beginDialog("/");
+
+        } else {
+
+            var AdmibRequestID = new mongo.ObjectID(); 
+
+                var AdminReqRecord = {
+                    'CreatedTime': LogTimeStame,
+                    '_id': AdmibRequestID,
+                    'Comments': results.response,
+                    'RequestType':'adminAuth_error_notAuthanticated'
+                }    	
+                
+                collAdminRequests.insert(AdminReqRecord, function(err, result){
+
+                });            
+
+            session.send("I'm sorry but in order to process your request, You have to be authanticated user. Let's start over... ");
+
+            session.endDialog();
+
+            session.beginDialog("/");
+
+
+        }
+
+     
     }
 ]);
 
