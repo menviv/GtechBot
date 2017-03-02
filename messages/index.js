@@ -261,7 +261,7 @@ bot.dialog('/validateUser', [
 
                             session.userData.Authanticated = 'False';
 
-                            SendInfoToExistingUser(numberOfTickets); 
+                            SendInfoToExistingUser(); 
 
                         } else {
 
@@ -295,7 +295,7 @@ bot.dialog('/validateUser', [
 
                                     numberOfTickets = result.length;
 
-                                    SendInfoToExistingUser(numberOfTickets);
+                                    SendInfoToExistingUser();
 
                               }
                               result.push(doc);
@@ -304,7 +304,7 @@ bot.dialog('/validateUser', [
 
         }
 
-        function SendInfoToExistingUser(numberOfTickets) {
+        function SendInfoToExistingUser() {
 
             if (session.userData.Authanticated == 'True') {
 
