@@ -134,7 +134,7 @@ bot.dialog('/', [
             break;
 
         default:
-            reply.text('You said \'' + session.message.text + '\'');
+            //reply.text('You said \'' + session.message.text + '\'');
             break;
     }
 
@@ -312,6 +312,11 @@ var paths = {
     "repath": { 
         description: "Anyhing else I can I help you with?",
         commands: { "I have another question": "question", "I have another technical problem": "support", "My tickets": "mytickets"  }
+    }, 
+
+    "reAdminAuth": { 
+        description: "Woul you like try again with me?",
+        commands: { "Yes": "reAdminLogin", "Reset my token": "resettoken", "Go back to my tickets": "mytickets" , "Goodbye": "bye"   }
     },    
 
     "question": { 
@@ -488,10 +493,25 @@ bot.dialog('/location', [
 
             session.beginDialog("/myTickets");
 
+        } else if (destination == 'reAdminLogin') {
+
+            session.endDialog();
+
+            session.beginDialog("/adminAuth");
+
+        } else if (destination == 'resettoken') {
+
+            session.endDialog();
+
+            session.beginDialog("/adminResetToken");
+
         }
         
     }
 ]);
+
+
+
 
 
 
@@ -542,16 +562,34 @@ bot.dialog('/getUserQuestion', [
 
 
 bot.dialog('helpDialog', function (session, args) {
-    session.endDialog(args.topic + ": This bot will echo back anything you say.");
+
+    if (args.topic == 'help') {
+
+        session.sendTyping();
+
+        session.send("type /mtickets - to get a list of your tickets");
+
+        session.send("type /otickets - to get a list of your tickets");
+
+        session.send("type /logout - to end our current discussion and start a new one");
+
+        session.send("type /restart - to restart our current discussion");
+
+        session.send("type /admin - well...this is a restricted area and for authorized users only.");
+
+        session.endDialog("Looking forward to your decision :)");
+
+    }    
+    
 }).triggerAction({ 
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case 'help':
+            case '/help':
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
-                callback(null, 1.0, { topic: 'general' });
+                callback(null, 1.0, { topic: 'help' });
                 break;
             default:
                 callback(null, 0.0);
@@ -567,7 +605,7 @@ bot.dialog('restartDialog', function (session, args) {
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case 'restart':
+            case '/restart':
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
@@ -613,7 +651,7 @@ bot.dialog('logoutDialog', function (session, args) {
 bot.dialog('myticketsDialog', function (session, args) {
     session.endDialog("This function will print out the list of your tickets");
 
-    if (args.topic == '/mytickets') {
+    if (args.topic == '/mtickets') {
 
         session.endDialog();
 
@@ -625,7 +663,7 @@ bot.dialog('myticketsDialog', function (session, args) {
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case '/mytickets':
+            case '/mtickets':
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
@@ -682,6 +720,126 @@ bot.dialog('/myTickets', [
             
     }
 ]);
+
+
+
+
+bot.dialog('/adminAuth', [
+
+    function (session) {
+
+        session.sendTyping();
+
+        session.send("Welcome to my admin mode! This is a restricted area and requires GTECH authorization to access. ");
+
+        builder.Prompts.text(session, "Your access token:"); 
+
+    },
+    function (session, results) {
+
+        var cursor = collUsers.find({"_id": UserID});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+
+            if (doc === null) {
+
+               var nresultLen = result.length;
+
+               if (results.response == result[0].Token ) {
+
+                   session.userData.adminAuth = 'True';
+
+                   session.send("Thank you. I was able to allocate your admin previliges. ");
+
+               } else {
+
+                   session.send("Sorry, but I was unable to allocate your admin previliges. ");
+
+                   session.beginDialog("/location", { location: "reAdminAuth" });
+
+               }
+
+                return;
+            }
+            
+            result.push(doc);
+        });        
+            
+    }
+]);
+
+
+
+
+bot.dialog('/adminResetToken', [
+
+    function (session) {
+
+        session.sendTyping();
+
+        session.send("So you want me to reset your token? Well no problem by just remember that tokens are granted to FLAGGED users only...");
+
+
+                var cursor = collUsers.find({"_id": UserID});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    var nTokenResult = result[0].Token;
+
+                    if (nTokenResult > 0 ) {
+
+                        session.userData.adminTokenReset = 'True';
+
+                    } else {
+
+                        session.send("And after I checked, but I was unable to allocate your admin previliges. ");
+
+                        session.beginDialog("/location", { location: "reAdminAuth" });
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                });  
+
+
+    },
+    function (session, results) {
+
+        if (session.userData.adminTokenReset == 'True') {
+
+            var Token = Math.floor(Math.random()*90000) + 10000;
+
+            var TokenRecord = {
+                'TokenCreatedTime': LogTimeStame,
+                '_id': UserID,
+                'Token':Token
+            }    	
+            
+            collUsers.upsert(TokenRecord, function(err, result){
+
+            });
+
+        }
+
+        session.userData.adminTokenReset = 'False';
+
+        session.send("Your new token is: " + Token);
+
+        session.beginDialog("/location", { location: "reAdminAuth" });
+            
+    }
+]);
+
+
 
 
 
