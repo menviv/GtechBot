@@ -1024,7 +1024,7 @@ bot.dialog('/respondToTicket', [
 
                         }
 
-                        builder.Prompts.choice(session, "List:", [TicketsArray]);
+                        builder.Prompts.choice(session, "List:", TicketsArray);
                         
                     } else {
 
