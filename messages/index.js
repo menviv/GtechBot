@@ -375,7 +375,7 @@ bot.dialog('/location', [
         
         var destination = session.dialogData.commands[results.response.entity];
 
-        if (destination == 'next') {
+        if (destination == 'repath') {
 
             session.replaceDialog("/location", { location: destination });
 
