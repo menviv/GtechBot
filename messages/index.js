@@ -338,7 +338,13 @@ var paths = {
              "newcr": { 
                 description: "What is the severity of your question?",
                 commands: { "Urgent": "urgentques", "Normal": "normalques"  }
-            }                            
+            } ,                           
+
+
+    "support": { 
+        description: "I guess that you need my help with a technical issue, right? what is it related to:",
+        commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
+    }, 
 
 }
 
@@ -368,7 +374,7 @@ bot.dialog('/location', [
 
             session.sendTyping();
 
-            session.send("Got it, you have question");
+            session.send("Got it, you have a question");
 
             session.userData.engagementReason = destination;
 
