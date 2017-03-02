@@ -900,28 +900,39 @@ bot.dialog('/CreateNewOrg', [
 
 
 
-bot.dialog('AdminModeDialog', function (session, args) {
 
-    if (args.topic == 'adminmode') {
+bot.dialog('adminModeDialog', function (session, args) {
 
             session.endDialog();
 
             session.beginDialog("/adminAuth");
-
-    } else if (args.topic == 'beadmin') {
-
-            session.endDialog();
-
-            session.beginDialog("/adminAuthRequests");
-
-    }
 
 }).triggerAction({ 
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
             case '/adminmode':
-                callback(null, 1.0, { topic: 'adminmode' }); 
+                callback(null, 1.0, { topic: 'adminmode' });                 
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
+
+
+bot.dialog('beAdminModeDialog', function (session, args) {
+
+            session.endDialog();
+
+            session.beginDialog("/adminAuthRequests");
+
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
             case '/beadmin':
                 callback(null, 1.0, { topic: 'beadmin' });                 
                 break;
