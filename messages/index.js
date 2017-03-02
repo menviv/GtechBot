@@ -1079,30 +1079,29 @@ bot.dialog('/AdminActions', [
 
         if (adminActions == 'Create New Org') {
 
-            session.endDialog();
-
             session.beginDialog("/CreateNewOrg");
 
         } else if (adminActions == 'Create New User') {
-
-            session.endDialog();
 
             session.beginDialog("/CreateNewUser");
             
         } else if (adminActions == 'Respond To Ticket') {
 
-            session.endDialog();
-
             session.beginDialog("/respondToTicket");
             
         } else if (adminActions == 'Open Tickets') {
-
-            session.endDialog();
 
             session.beginDialog("/opentickets");
             
         }
      
+    },
+    function (session, results) {
+
+        session.send("Let me show you a quick preview on the ticket..");
+        
+        session.beginDialog("/ticketPreview"); 
+            
     }
 ]);
 
@@ -1132,19 +1131,7 @@ bot.dialog('/respondToTicket', [
 
                     if (nresultLen > 0 ) {
 
-                        //var TicketsObject = {};
-
                         for (var i=0; i<nresultLen; i++ ) {
-
-                           // session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
-
-                            //TicketsArray.push(result[i].ObjectNo + '|');
-
-                            //var ObjectName = result[i].ObjectNo;
-
-                            //TicketsObject[ObjectName] = result[i].ObjectNo;
-
-                            //TicketsArray = "'" + result[i].ObjectNo + "'";
 
                             session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
 
@@ -1207,9 +1194,6 @@ bot.dialog('/respondToTicket', [
             }); 
 
             session.endDialog();  
-
-            session.beginDialog("/ticketPreview");     
-
         
     },
 ]);
