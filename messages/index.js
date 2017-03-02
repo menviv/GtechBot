@@ -1255,7 +1255,7 @@ bot.dialog('/ticketPreview', [
 
                             if (result.length > 0 ) {
 
-                                for (var i=0; i<nresultLen; i++ ) {
+                                for (var i=0; i<result.length; i++ ) {
 
                                  session.send("Response: " + result[i].ObjectTxt);
 
