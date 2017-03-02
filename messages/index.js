@@ -663,7 +663,7 @@ bot.dialog('logoutDialog', function (session, args) {
 
 
 bot.dialog('myticketsDialog', function (session, args) {
-    session.endDialog("This function will print out the list of your tickets");
+    
 
     if (args.topic == 'mtickets') {
 
