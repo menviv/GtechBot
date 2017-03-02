@@ -152,11 +152,7 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        session.send("Let's start with a simple registration... ");
-
-        session.sendTyping();
-
-        builder.Prompts.text(session, "Your email is: ");
+        builder.Prompts.text(session, "Let me just quickly find you on my lists... remind me, what is your email? ");
 
     },
     function (session, results) {
@@ -249,7 +245,7 @@ bot.dialog('/', [
         UserName = results.response;
         session.userData.name = UserName;
 
-        builder.Prompts.choice(session, "One quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888"]);
+        builder.Prompts.choice(session, "One last quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888"]);
     },
 
     function (session, results) {
@@ -282,6 +278,7 @@ bot.dialog('/', [
 
             });
 
+            session.userData.Authanticated = 'True';
 
             session.send("Thank you for sharing this information with me."); 
 
