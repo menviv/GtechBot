@@ -1012,19 +1012,19 @@ bot.dialog('/respondToTicket', [
 
                     if (nresultLen > 0 ) {
 
-                        var TicketsArray = [];
+                        var TicketsArray;
 
                         for (var i=0; i<nresultLen; i++ ) {
 
                            // session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
 
-                            TicketsArray.push(result[i].ObjectNo);
+                            //TicketsArray.push(result[i].ObjectNo);
 
-                            //TicketsArray.push("'" + result[i].ObjectNo + "'");
+                            TicketsArray = "'" + result[i].ObjectNo + "'";
 
                         }
 
-                        builder.Prompts.choice(session, "List:", TicketsArray);
+                        builder.Prompts.choice(session, "List:", [TicketsArray]);
                         
                     } else {
 
