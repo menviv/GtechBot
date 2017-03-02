@@ -167,7 +167,8 @@ bot.dialog('/', [
 
         } else {
 
-            session.beginDialog("/RegisterUser"); 
+            //session.beginDialog("/RegisterUser"); 
+            session.send("Contact me by Email to complete your registration");
 
         }
 
