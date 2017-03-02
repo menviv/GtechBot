@@ -939,7 +939,7 @@ bot.dialog('AdminModeDialog', function (session, args) {
 bot.dialog('/AdminActions', [
     function (session) {
 
-        builder.Prompts.choice(session, "Administrator functions?", ["Create New Org", "Create New User", "Open Tickets"]);
+        builder.Prompts.choice(session, "Administrator functions?", ["Respond To Ticket", "Create New Org", "Create New User", "Open Tickets"]);
 
     },
     function (session, results) {
@@ -958,6 +958,12 @@ bot.dialog('/AdminActions', [
 
             session.beginDialog("/CreateNewUser");
             
+        } else if (adminActions == 'Respond To Ticket') {
+
+            session.endDialog();
+
+            session.beginDialog("/respondToTicket");
+            
         } else if (adminActions == 'Open Tickets') {
 
             session.endDialog();
@@ -965,13 +971,92 @@ bot.dialog('/AdminActions', [
             session.beginDialog("/opentickets");
             
         }
+     
+    }
+]);
 
-        session.endDialog();
 
-        session.beginDialog("/DefineNewOrgName");
+
+
+
+
+bot.dialog('/respondToTicket', [
+
+    function (session) {
+
+        session.sendTyping();
+
+        session.send("List on NEW status tickets:");
+
+
+                var cursor = collTickets.find({ "Status" : "new"});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    var nresultLen = result.length;
+
+                    if (nresultLen > 0 ) {
+
+                        var TicketsArray = [];
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                           // session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
+
+                            TicketsArray.push(result[i].ObjectTxt);
+
+                        }
+
+                        builder.Prompts.choice(session, "List:", [TicketsArray]);
+                        
+                    } else {
+
+                        session.send("Yu Pi Di Dey!!! There are no NEW tickets to handle!");
+
+                        session.beginDialog("/location", { location: "reAdminAuth" });
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                });  
+
+
+    },
+    function (session, results) {
+
+        if (session.userData.adminTokenReset == 'True') {
+
+            var Token = Math.floor(Math.random()*90000) + 10000;
+
+            var TokenRecord = {
+                'TokenCreatedTime': LogTimeStame,
+                '_id': UserID,
+                'Token':Token
+            }    	
+            
+            collUsers.upsert(TokenRecord, function(err, result){
+
+            });
+
+        }
+
+        session.userData.adminTokenReset = 'False';
+
+        session.send("Your new token is: " + Token);
+
+        session.beginDialog("/location", { location: "reAdminAuth" });
             
     }
 ]);
+
+
 
 
 
