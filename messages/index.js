@@ -673,24 +673,20 @@ bot.dialog('helpDialog', function (session, args) {
 
 bot.dialog('restartDialog', function (session, args) {
 
-    if (args.topic == 'recalculating') {
+    session.endDialog();
+
+    if (args.topic == 'home') {
 
         session.beginDialog("/");
 
-    } else if (args.topic == 'home') {
-
-        session.beginDialog("/location", { location: "path" });
-
-    }
+    } 
 
 }).triggerAction({ 
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case '/restart':
-                callback(null, 1.0, { topic: 'recalculating' });
             case '/home':
-                callback(null, 1.0, { topic: 'home' });                
+                callback(null, 1.0, { topic: 'home' });              
                 break;
             default:
                 callback(null, 0.0);
