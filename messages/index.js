@@ -429,25 +429,17 @@ bot.dialog('/location', [
 
         } else if (destination == 'mytickets') {
 
-            session.endDialog();
-
             session.beginDialog("/myTickets");
 
         } else if (destination == 'reAdminLogin') {
-
-            session.endDialog();
 
             session.beginDialog("/adminAuth");
 
         } else if (destination == 'resettoken') {
 
-            session.endDialog();
-
             session.beginDialog("/adminResetToken");
 
         } else if (destination == 'OKcallmeback') {
-
-            session.endDialog();
 
             session.beginDialog("/adminReqToCallBack");
 
@@ -688,7 +680,7 @@ bot.dialog('/myTickets', [
     },
     function (session, results) {
 
-            session.beginDialog("/location", { location: "path" });
+            session.beginDialog("/location", { location: "repath" });
 
     }
 ]);
