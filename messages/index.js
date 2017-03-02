@@ -345,6 +345,10 @@ var paths = {
         description: "I guess that you need my help with a technical issue, right? what is it related to:",
         commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
     }, 
+    "callmeback": { 
+        description: "OK.. ok... calm down, I will find an availble humen being and ask him to call you ASAP...",
+        commands: { "OK": "OKcallmeback", "OK and Let me open a ticket": "path", "Goodbye": "bye"  }
+    }, 
 
 }
 
@@ -427,6 +431,12 @@ bot.dialog('/location', [
             session.endDialog();
 
             session.beginDialog("/adminResetToken");
+
+        } else if (destination == 'OKcallmeback') {
+
+            session.endDialog();
+
+            session.beginDialog("/adminReqToCallBack");
 
         }
         
@@ -1015,6 +1025,64 @@ bot.dialog('/adminAuthRequests', [
      
     }
 ]);
+
+
+
+
+
+
+
+
+
+
+
+bot.dialog('/adminReqToCallBack', [
+    function (session) {
+
+        builder.Prompts.text(session, "What is your current phone number?");
+
+    },
+    function (session, results) {
+
+        if (session.userData.Authanticated == 'True') {
+
+            var AdmibRequestID = new mongo.ObjectID(); 
+
+                var adminResetToCallBackRecord = {
+                    'CreatedTime': LogTimeStame,
+                    'RequestByUserID': UserID,
+                    '_id': AdmibRequestID,
+                    'Phone': results.response,
+                    'RequestType':'adminCallBack',
+                    'Name':UserName,
+                    'Status':'pending'
+                }    	
+                
+                collAdminRequests.insert(adminResetToCallBackRecord, function(err, result){
+
+                });
+
+        } else {
+
+            var AdmibRequestID = new mongo.ObjectID(); 
+
+                var adminResetToCallBackRecord = {
+                    'CreatedTime': LogTimeStame,
+                    '_id': AdmibRequestID,
+                    'Comments': results.response,
+                    'RequestType':'adminCallBack_error_notAuthanticated'
+                }    	
+                
+                collAdminRequests.insert(adminResetToCallBackRecord, function(err, result){
+
+                });            
+
+        }
+
+     
+    }
+]);
+
 
 
 
