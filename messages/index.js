@@ -654,11 +654,17 @@ bot.dialog('logoutDialog', function (session, args) {
 bot.dialog('myticketsDialog', function (session, args) {
     session.endDialog("This function will print out the list of your tickets");
 
-    if (args.topic == '/mtickets') {
+    if (args.topic == 'mtickets') {
 
         session.endDialog();
 
         session.beginDialog("/myTickets");
+
+    } else if (args.topic == 'myopentickets') {
+
+        session.endDialog();
+
+        session.beginDialog("/myOpenTickets");
 
     }
 
@@ -667,10 +673,9 @@ bot.dialog('myticketsDialog', function (session, args) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
             case '/mtickets':
-                // You can trigger the action with callback(null, 1.0) but you're also
-                // allowed to return additional properties which will be passed along to
-                // the triggered dialog.
                 callback(null, 1.0, { topic: 'mytickets' });
+            case '/otickets':
+                callback(null, 1.0, { topic: 'myopentickets' });                
                 break;
             default:
                 callback(null, 0.0);
@@ -723,6 +728,46 @@ bot.dialog('/myTickets', [
             
     }
 ]);
+
+
+
+
+
+
+bot.dialog('/myOpenTickets', [
+    function (session) {
+
+        session.send("Your open tickets: ");
+
+        var cursor = collTickets.find({"UserID": UserID, "Status" : "new"});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+            if (doc === null) {
+
+               var nresultLen = result.length;
+
+               for (var i=0; i<nresultLen; i++ ) {
+
+                   session.send("results: " + result[i].ObjectTxt + " | " +  result[i].ObjectNo + " | " +  result[i].Status);
+
+               }
+
+                return;
+            }
+            // do something with each doc, like push Email into a results array
+            result.push(doc);
+        });        
+
+    },
+    function (session, results) {
+
+
+            
+    }
+]);
+
 
 
 
