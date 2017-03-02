@@ -1112,7 +1112,7 @@ bot.dialog('/ticketPreview', [
         var ticketNumberToHandle = session.userData.ticketNumberToHandle;
 
 
-                var cursor = collTickets.find({"TicketNo": ticketNumberToHandle});
+                var cursor = collTickets.find({"ObjectNo": ticketNumberToHandle});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
