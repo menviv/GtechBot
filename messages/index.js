@@ -1084,7 +1084,7 @@ bot.dialog('/adminGenReq', [
 
             session.endDialog();
 
-            session.beginDialog("/");                
+            session.beginDialog("/location", { location: "reAdminAuth" });              
 
         } else {
 
