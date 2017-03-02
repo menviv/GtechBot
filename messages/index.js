@@ -511,19 +511,19 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.sendTyping();
 
-        session.send("type /home - to acknoledge me about your need for assitance");
+        session.send("use '/home' to acknoledge me about your need for assitance");
 
-        session.send("type /mtickets - to get a list of your tickets");
+        session.send("use '/mtickets' - to get a list of your tickets");
 
-        session.send("type /otickets - to get a list of your open tickets");
+        session.send("use '/otickets' - to get a list of your open tickets");
 
-        session.send("type /logout - to end our current discussion and start a new one");
+        session.send("use '/logout' - to end our current discussion and start a new one");
 
-        session.send("type /restart - to restart our current discussion");
+        session.send("use '/restart' - to restart our current discussion");
 
-        session.send("type /adminmode - well...this is a restricted area and for authorized users only.");
+        session.send("use '/adminmode' - well...this is a restricted area and for authorized users only.");
 
-        session.send("type /beadmin - and I can promise to consider your request");
+        session.send("use '/beadmin' - and I can promise to consider your request");
 
         session.endDialog("Looking forward to your decision :)");
 
