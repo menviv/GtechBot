@@ -261,7 +261,7 @@ bot.dialog('/validateUser', [
 
                             session.userData.Authanticated = 'False';
 
-                            //builder.Prompts.text(session, "And you name?"); 
+                            SendInfoToExistingUser(numberOfTickets); 
 
                         } else {
 
@@ -309,8 +309,6 @@ bot.dialog('/validateUser', [
             if (session.userData.Authanticated == 'True') {
 
                session.send("Good to have you back with me " + UserName + "! You have " + numberOfTickets + " open tickets must be resolved."); 
-
-               
 
             } else {
 
