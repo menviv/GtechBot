@@ -245,7 +245,7 @@ bot.dialog('/', [
         UserName = results.response;
         session.userData.name = UserName;
 
-        builder.Prompts.choice(session, "One last quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888"]);
+        builder.Prompts.choice(session, "One last quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888", "Other"]);
     },
 
     function (session, results) {
@@ -307,7 +307,7 @@ var paths = {
 
     "path": { 
         description: "So now, how can I help you?",
-        commands: { "I have a question": "question", "I have a technical problem": "support", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
+        commands: { "I have a question": "question", "I have a technical problem": "support", "I have a special request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
     },
 
     "repath": { 
@@ -319,6 +319,11 @@ var paths = {
         description: "Woul you like try again with me?",
         commands: { "Yes": "reAdminLogin", "Reset my token": "resettoken", "Go back to my tickets": "mytickets" , "Goodbye": "bye"   }
     },    
+
+    "request": { 
+        description: "Your request is about...:",
+        commands: { "My org is not on the list, can you add it?": "orgnotfound", "My user is not an authorised admin, can you set it for me?": "setuserasadmin", "something else": "requestelse"  }
+    }, 
 
     "question": { 
         description: "Your question is related to:",
@@ -374,11 +379,19 @@ bot.dialog('/location', [
 
             session.replaceDialog("/location", { location: destination });
 
-        } else if (destination == 'question') {
+        } else if (destination == 'question' || destination == 'support' || destination == 'request') {
 
             session.sendTyping();
 
-            session.send("Got it, you have a question");
+            if (destination == 'question' || destination == 'request') {
+
+                session.send("Got it, you have a " + destination);
+
+            } else {
+
+                session.send("Got it, you need my " + destination);
+
+            }
 
             session.userData.engagementReason = destination;
 
@@ -437,6 +450,14 @@ bot.dialog('/location', [
             session.endDialog();
 
             session.beginDialog("/adminReqToCallBack");
+
+        } else if (destination == 'orgnotfound' || destination == 'setuserasadmin' || destination == 'requestelse' ) {
+
+            session.userData.AdminReqType = destination;
+
+            session.endDialog();
+
+            session.beginDialog("/adminGenReq");
 
         }
         
@@ -969,7 +990,7 @@ bot.dialog('/AdminActions', [
 bot.dialog('/adminAuthRequests', [
     function (session) {
 
-        builder.Prompts.text(session, "Any comments that you would like to add that I should consider?:");
+        builder.Prompts.text(session, "Any comments that you would like to add that I should consider?");
 
     },
     function (session, results) {
@@ -1033,6 +1054,64 @@ bot.dialog('/adminAuthRequests', [
 
 
 
+bot.dialog('/adminGenReq', [
+    function (session) {
+
+        builder.Prompts.text(session, "Any comments that you would like to add that I should consider?");
+
+    },
+    function (session, results) {
+
+        if (session.userData.Authanticated == 'True') {
+
+            var AdmibRequestID = new mongo.ObjectID(); 
+
+                var adminGenResetRecord = {
+                    'CreatedTime': LogTimeStame,
+                    'RequestByUserID': UserID,
+                    '_id': AdmibRequestID,
+                    'Comment': results.response,
+                    'RequestType':session.userData.AdminReqType,
+                    'Name':UserName,
+                    'Status':'pending'
+                }    	
+                
+                collAdminRequests.insert(adminGenResetRecord, function(err, result){
+
+                });
+
+            session.send("Thank you, I promise to process this one as quickly as possible and get back to you with a status. By 'quickly' I mean not more than 24 hours... ");
+
+            session.endDialog();
+
+            session.beginDialog("/");                
+
+        } else {
+
+            var AdmibRequestID = new mongo.ObjectID(); 
+
+                var adminGenResetRecord = {
+                    'CreatedTime': LogTimeStame,
+                    '_id': AdmibRequestID,
+                    'Comments': results.response,
+                    'RequestType':session.userData.AdminReqType + '_error_notAuthanticated'
+                }    	
+                
+                collAdminRequests.insert(adminGenResetRecord, function(err, result){
+
+                });  
+
+                session.send("I'm sorry but in order to process your request, You have to be authanticated user. Let's start over... ");
+
+                session.endDialog();
+
+                session.beginDialog("/");                          
+
+        }
+
+     
+    }
+]);
 
 
 
@@ -1062,6 +1141,12 @@ bot.dialog('/adminReqToCallBack', [
 
                 });
 
+                session.send("OK.. ok... calm down, I will find an availble humen being and ask him to call you ASAP... ");
+
+                session.endDialog();
+
+                session.beginDialog("/");                 
+
         } else {
 
             var AdmibRequestID = new mongo.ObjectID(); 
@@ -1076,6 +1161,12 @@ bot.dialog('/adminReqToCallBack', [
                 collAdminRequests.insert(adminResetToCallBackRecord, function(err, result){
 
                 });            
+
+                session.send("I'm sorry but in order to process your request, You have to be authanticated user. Let's start over... ");
+
+                session.endDialog();
+
+                session.beginDialog("/");
 
         }
 
