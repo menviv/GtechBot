@@ -581,7 +581,7 @@ bot.dialog('logoutDialog', function (session, args) {
 bot.dialog('myticketsDialog', function (session, args) {
     
 
-    if (args.topic == 'mtickets') {
+    if (args.topic == 'mytickets') {
 
         session.endDialog();
 
