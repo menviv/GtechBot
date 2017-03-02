@@ -1018,11 +1018,13 @@ bot.dialog('/respondToTicket', [
 
                            // session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
 
-                            TicketsArray.push(result[i].ObjectTxt);
+                            TicketsArray.push(result[i].ObjectNo);
+
+                            //TicketsArray.push("'" + result[i].ObjectNo + "'");
 
                         }
 
-                        builder.Prompts.choice(session, "List:", [TicketsArray]);
+                        builder.Prompts.choice(session, "List:", TicketsArray);
                         
                     } else {
 
