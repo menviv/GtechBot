@@ -582,24 +582,14 @@ bot.dialog('myticketsDialog', function (session, args) {
     
     session.endDialog();
 
-    if (args.topic == 'mytickets') {
-
-        session.beginDialog("/myTickets");
-
-    } else if (args.topic == 'myopentickets') {
-
-        session.beginDialog("/myOpenTickets");
-
-    }
+    session.beginDialog("/myTickets");
 
 }).triggerAction({ 
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
             case '/mtickets':
-                callback(null, 1.0, { topic: 'mytickets' });
-            case '/otickets':
-                callback(null, 2.0, { topic: 'myopentickets' });                
+                callback(null, 1.0, { topic: 'mytickets' });             
                 break;
             default:
                 callback(null, 0.0);
@@ -608,7 +598,25 @@ bot.dialog('myticketsDialog', function (session, args) {
     } 
 });
 
+bot.dialog('myOpenticketsDialog', function (session, args) {
+    
+    session.endDialog();
 
+    session.beginDialog("/myOpenTickets");
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case '/otickets':
+                callback(null, 1.0, { topic: 'myopentickets' });                
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
 
 
 
