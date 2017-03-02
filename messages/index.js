@@ -1103,6 +1103,11 @@ bot.dialog('/AdminActions', [
         
         session.beginDialog("/ticketPreview"); 
             
+    },
+    function (session, results) {
+
+        session.send("responses:" + responses);
+                    
     }
 ]);
 
@@ -1230,8 +1235,6 @@ bot.dialog('/ticketPreview', [
 
                         session.send(result[0].ObjectNo + ": " + result[0].ObjectTxt);
 
-                        GetTicketResponses();
-
                     } else {
 
                         session.send("And after I checked, but I was unable to allocate the ticket number ");
@@ -1246,7 +1249,11 @@ bot.dialog('/ticketPreview', [
 
 
 
-                function GetTicketResponses() {
+                
+
+
+    },
+    function (session, results) {
 
                         var cursor = collTicketResponses.find({"TicketNo": ticketNumberToHandle});
                         var result = [];
@@ -1278,14 +1285,8 @@ bot.dialog('/ticketPreview', [
                             result.push(doc);
                         }); 
 
+                        session.endDialog();        
 
-                }
-
-
-    },
-    function (session, results) {
-
-        session.send("responses:" + responses);
             
     }
 ]);
