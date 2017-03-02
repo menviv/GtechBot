@@ -575,7 +575,7 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.send("type /restart - to restart our current discussion");
 
-        session.send("type /admin - well...this is a restricted area and for authorized users only.");
+        session.send("type /adminmode - well...this is a restricted area and for authorized users only.");
 
         session.endDialog("Looking forward to your decision :)");
 
@@ -894,6 +894,36 @@ bot.dialog('/CreateNewOrg', [
 
 
 
+bot.dialog('AdminModeDialog', function (session, args) {
+
+    if (args.topic == 'adminmode') {
+
+            session.endDialog();
+
+            session.beginDialog("/adminAuth");
+
+    }
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case '/adminmode':
+                // You can trigger the action with callback(null, 1.0) but you're also
+                // allowed to return additional properties which will be passed along to
+                // the triggered dialog.
+                callback(null, 1.0, { topic: 'adminmode' });
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
+
+
+
+
 
 bot.dialog('/AdminActions', [
     function (session) {
@@ -931,6 +961,9 @@ bot.dialog('/AdminActions', [
             
     }
 ]);
+
+
+
 
 bot.dialog('/DefineNewOrgName', [
     function (session) {
