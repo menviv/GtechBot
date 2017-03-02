@@ -1212,6 +1212,8 @@ bot.dialog('/ticketPreview', [
 
         var ticketNumberToHandle = session.userData.ticketNumberToHandle;
 
+        session.send(ticketNumberToHandle);
+
 
                 var cursor = collTickets.find({"ObjectNo": ticketNumberToHandle});
                 var result = [];
