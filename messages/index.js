@@ -1018,7 +1018,7 @@ bot.dialog('/respondToTicket', [
 
                            // session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
 
-                            TicketsArray.push(result[i].ObjectNo);
+                            TicketsArray.push(result[i].ObjectNo + '|');
 
                             //TicketsArray = "'" + result[i].ObjectNo + "'";
 
