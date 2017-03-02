@@ -78,6 +78,7 @@ var OrgName;
 var OrgID;
 var ResponseID;
 var numberOfTickets;
+var responses;
 
 
 
@@ -1214,6 +1215,8 @@ bot.dialog('/ticketPreview', [
 
         var nticketNumberToHandle = parseInt(ticketNumberToHandle);
 
+        
+
 
                 var cursor = collTickets.find({"ObjectNo": nticketNumberToHandle});
                 var result = [];
@@ -1257,7 +1260,9 @@ bot.dialog('/ticketPreview', [
 
                                 for (var i=0; i<result.length; i++ ) {
 
-                                 session.send("Response: " + result[i].ObjectTxt);
+                                    session.send("Response: " + result[i].ObjectTxt);
+
+                                    responses = responses + result[i].ObjectTxt + "<br />";
 
                                 }                                
 
@@ -1280,27 +1285,7 @@ bot.dialog('/ticketPreview', [
     },
     function (session, results) {
 
-        if (session.userData.adminTokenReset == 'True') {
-
-            var Token = Math.floor(Math.random()*90000) + 10000;
-
-            var TokenRecord = {
-                'TokenCreatedTime': LogTimeStame,
-                '_id': UserID,
-                'Token':Token
-            }    	
-            
-            collUsers.upsert(TokenRecord, function(err, result){
-
-            });
-
-        }
-
-        session.userData.adminTokenReset = 'False';
-
-        session.send("Your new token is: " + Token);
-
-        session.beginDialog("/location", { location: "reAdminAuth" });
+        session.send(responses);
             
     }
 ]);
