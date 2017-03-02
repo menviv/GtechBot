@@ -1020,9 +1020,9 @@ bot.dialog('/respondToTicket', [
 
                             //TicketsArray.push(result[i].ObjectNo + '|');
 
-                            var ObjectName = "Ticket" + result[i].ObjectNo;
+                            var ObjectName = result[i].ObjectNo;
 
-                            TicketsObject[ObjectName] = result[i].ObjectTxt;
+                            TicketsObject[ObjectName] = result[i].ObjectNo;
 
                             //TicketsArray = "'" + result[i].ObjectNo + "'";
 
