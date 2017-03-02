@@ -1243,7 +1243,7 @@ bot.dialog('/ticketPreview', [
 
                 function GetTicketResponses() {
 
-                        var cursor = collTicketResponses.find({"ObjectNo": ticketNumberToHandle});
+                        var cursor = collTicketResponses.find({"TicketNo": ticketNumberToHandle});
                         var result = [];
                         cursor.each(function(err, doc) {
                             if(err)
