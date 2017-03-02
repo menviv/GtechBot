@@ -1015,7 +1015,7 @@ bot.dialog('/respondToTicket', [
 
                     if (nresultLen > 0 ) {
 
-                        var TicketsObject = {};
+                        //var TicketsObject = {};
 
                         for (var i=0; i<nresultLen; i++ ) {
 
@@ -1089,10 +1089,117 @@ bot.dialog('/respondToTicket', [
 
             }); 
 
-            session.endDialog();       
+            session.endDialog();  
+
+            session.beginDialog("/ticketPreview");     
 
         
     },
+]);
+
+
+
+
+
+
+
+bot.dialog('/ticketPreview', [
+
+    function (session) {
+
+        session.sendTyping();
+
+        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+
+
+                var cursor = collTickets.find({"TicketNo": ticketNumberToHandle});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    if (result.length > 0 ) {
+
+                        session.send(result[0].ObjectNo + ": " + result[0].ObjectTxt);
+
+                        GetTicketResponses();
+
+                    } else {
+
+                        session.send("And after I checked, but I was unable to allocate the ticket number ");
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                }); 
+
+
+
+                function GetTicketResponses() {
+
+                        var cursor = collTicketResponses.find({"ObjectNo": ticketNumberToHandle});
+                        var result = [];
+                        cursor.each(function(err, doc) {
+                            if(err)
+                                throw err;
+
+                            if (doc === null) {
+
+                            if (result.length > 0 ) {
+
+                                for (var i=0; i<nresultLen; i++ ) {
+
+                                 session.send("Response: " + result[i].ObjectTxt);
+
+                                }                                
+
+                            } else {
+
+                                session.send("And after I checked, but I was unable to allocate any responses for this ticket ");
+
+                            }
+
+                                return;
+                            }
+                            
+                            result.push(doc);
+                        }); 
+
+
+                }
+
+
+    },
+    function (session, results) {
+
+        if (session.userData.adminTokenReset == 'True') {
+
+            var Token = Math.floor(Math.random()*90000) + 10000;
+
+            var TokenRecord = {
+                'TokenCreatedTime': LogTimeStame,
+                '_id': UserID,
+                'Token':Token
+            }    	
+            
+            collUsers.upsert(TokenRecord, function(err, result){
+
+            });
+
+        }
+
+        session.userData.adminTokenReset = 'False';
+
+        session.send("Your new token is: " + Token);
+
+        session.beginDialog("/location", { location: "reAdminAuth" });
+            
+    }
 ]);
 
 
