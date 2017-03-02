@@ -1012,15 +1012,15 @@ bot.dialog('/respondToTicket', [
 
                     if (nresultLen > 0 ) {
 
-                        var TicketsArray;
+                        var TicketsArray=[];
 
                         for (var i=0; i<nresultLen; i++ ) {
 
                            // session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
 
-                            //TicketsArray.push(result[i].ObjectNo);
+                            TicketsArray.push(result[i].ObjectNo);
 
-                            TicketsArray = "'" + result[i].ObjectNo + "'";
+                            //TicketsArray = "'" + result[i].ObjectNo + "'";
 
                         }
 
@@ -1044,27 +1044,24 @@ bot.dialog('/respondToTicket', [
     },
     function (session, results) {
 
-        if (session.userData.adminTokenReset == 'True') {
+        if (session.userData.adminAuth = 'True') {
 
-            var Token = Math.floor(Math.random()*90000) + 10000;
+            var ticketNO = results.response.entity;
 
-            var TokenRecord = {
+
+
+            var TicketUpdateRecord = {
                 'TokenCreatedTime': LogTimeStame,
                 '_id': UserID,
                 'Token':Token
             }    	
             
-            collUsers.upsert(TokenRecord, function(err, result){
+          //  collUsers.upsert(TokenRecord, function(err, result){
 
-            });
+          //  });
 
         }
 
-        session.userData.adminTokenReset = 'False';
-
-        session.send("Your new token is: " + Token);
-
-        session.beginDialog("/location", { location: "reAdminAuth" });
             
     }
 ]);
