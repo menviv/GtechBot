@@ -629,11 +629,6 @@ bot.dialog('/myTickets', [
 
         session.send("Your tickets: ");
 
-    },
-    function (session, results) {
-
-        session.send("Your tickets: ");
-
         var cursor = collTickets.find({"UserID": UserID});
         var result = [];
         cursor.each(function(err, doc) {
@@ -653,7 +648,14 @@ bot.dialog('/myTickets', [
             }
             // do something with each doc, like push Email into a results array
             result.push(doc);
-        });  
+        }); 
+
+    },
+    function (session, results) {
+
+        session.send("Your tickets: ");
+
+ 
             
     }
 ]);
