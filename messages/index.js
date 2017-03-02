@@ -26,6 +26,7 @@ var collCategories;
 var collOrgs;
 var collUsers;
 var collAdminRequests;
+var collTicketResponses;
 
 // Initialize connection once
 
@@ -40,6 +41,7 @@ mongo.MongoClient.connect(connString, function(err, database) {
   collOrgs = dbm.collection('Orgs');
   collUsers = dbm.collection('Users');
   collAdminRequests = dbm.collection('AdminRequests');
+  collTicketResponses = dbm.collection('TicketResponses');
 
 });
 
@@ -74,6 +76,7 @@ var ResponseTimeFrameLabel;
 var OrgType;
 var OrgName;
 var OrgID;
+var ResponseID;
 
 
 
@@ -1020,15 +1023,17 @@ bot.dialog('/respondToTicket', [
 
                             //TicketsArray.push(result[i].ObjectNo + '|');
 
-                            var ObjectName = result[i].ObjectNo;
+                            //var ObjectName = result[i].ObjectNo;
 
-                            TicketsObject[ObjectName] = result[i].ObjectNo;
+                            //TicketsObject[ObjectName] = result[i].ObjectNo;
 
                             //TicketsArray = "'" + result[i].ObjectNo + "'";
 
+                            session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
+
                         }
 
-                        builder.Prompts.choice(session, "List:", TicketsObject);
+                        builder.Prompts.text(session, "Please provide me with the ticket number to load: "); 
                         
                     } else {
 
@@ -1050,26 +1055,44 @@ bot.dialog('/respondToTicket', [
 
         if (session.userData.adminAuth = 'True') {
 
-            var ticketNO = results.response.entity;
+            var ticketNO = results.response;
 
             session.send("The chosen ticket is: " + ticketNO);
 
+            session.userData.ticketNumberToHandle = ticketNO;  
 
-
-            var TicketUpdateRecord = {
-                'TokenCreatedTime': LogTimeStame,
-                '_id': UserID,
-                'Token':Token
-            }    	
-            
-          //  collUsers.upsert(TokenRecord, function(err, result){
-
-          //  });
+            builder.Prompts.text(session, "Your response will be:  ");   
 
         }
-
             
-    }
+    },    
+    function (session, results) {
+
+        var TicketResponse = results.response;
+        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+
+        ResponseID = new mongo.ObjectID(); 
+
+            var TicketResponseRecord = {
+                'CreatedTime': LogTimeStame,
+                'UserID': UserID,
+                '_id': ResponseID,
+                'CreatedBy':UserName,
+                'CreatedByEmail':UserEmail,
+                'TicketNo':ticketNumberToHandle,
+                'ObjectFormat':'txt',
+                'ObjectTxt':TicketResponse,
+                'Status':'unread'
+            }    	
+            
+            collTicketResponses.insert(TicketResponseRecord, function(err, result){
+
+            }); 
+
+            session.endDialog();       
+
+        
+    },
 ]);
 
 
