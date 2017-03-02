@@ -753,6 +753,8 @@ bot.dialog('/adminAuth', [
 
                    session.send("Thank you. I was able to allocate your admin previliges. ");
 
+                   session.beginDialog("/AdminActions");
+
                } else {
 
                    session.send("Sorry, but I was unable to allocate your admin previliges. ");
