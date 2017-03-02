@@ -580,16 +580,13 @@ bot.dialog('logoutDialog', function (session, args) {
 
 bot.dialog('myticketsDialog', function (session, args) {
     
+    session.endDialog();
 
     if (args.topic == 'mytickets') {
-
-        session.endDialog();
 
         session.beginDialog("/myTickets");
 
     } else if (args.topic == 'myopentickets') {
-
-        session.endDialog();
 
         session.beginDialog("/myOpenTickets");
 
