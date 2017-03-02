@@ -1052,6 +1052,8 @@ bot.dialog('/respondToTicket', [
 
             var ticketNO = results.response.entity;
 
+            session.send("The chosen ticket is: " + ticketNO);
+
 
 
             var TicketUpdateRecord = {
