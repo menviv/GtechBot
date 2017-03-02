@@ -1082,7 +1082,7 @@ bot.dialog('/adminGenReq', [
 
            // session.endDialog();
 
-            session.beginDialog("/location", { location: "reAdminAuth" });              
+            session.beginDialog("/location", { location: "repath" });              
 
         } else {
 
