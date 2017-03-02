@@ -599,7 +599,7 @@ bot.dialog('myticketsDialog', function (session, args) {
             case '/mtickets':
                 callback(null, 1.0, { topic: 'mytickets' });
             case '/otickets':
-                callback(null, 1.0, { topic: 'myopentickets' });                
+                callback(null, 2.0, { topic: 'myopentickets' });                
                 break;
             default:
                 callback(null, 0.0);
