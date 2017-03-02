@@ -1080,7 +1080,7 @@ bot.dialog('/adminGenReq', [
 
             session.send("Thank you, I promise to process this one as quickly as possible and get back to you with a status. By 'quickly' I mean not more than 24 hours... ");
 
-            session.endDialog();
+           // session.endDialog();
 
             session.beginDialog("/location", { location: "reAdminAuth" });              
 
