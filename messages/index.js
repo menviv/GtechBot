@@ -627,6 +627,7 @@ bot.dialog('myOpenticketsDialog', function (session, args) {
 bot.dialog('/myTickets', [
     function (session) {
 
+        session.send("Your tickets: ");
 
     },
     function (session, results) {
