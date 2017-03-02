@@ -747,6 +747,10 @@ bot.dialog('/myTickets', [
 
 bot.dialog('/myOpenTickets', [
     function (session) {
+      
+
+    },
+    function (session, results) {
 
         session.send("Your open tickets: ");
 
@@ -769,12 +773,7 @@ bot.dialog('/myOpenTickets', [
             }
             // do something with each doc, like push Email into a results array
             result.push(doc);
-        });        
-
-    },
-    function (session, results) {
-
-
+        }); 
             
     }
 ]);
