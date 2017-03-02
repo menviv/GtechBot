@@ -198,9 +198,9 @@ bot.dialog('/', [
                                             throw err;
                                         if (doc === null) {
 
-                                            var nresultLen = result.length;
+                                            var numberOfTikets = result.length;
 
-                                            SendInfoToExistingUser(nresultLen);
+                                            SendInfoToExistingUser(numberOfTikets);
 
                                             //return;
                                         }
@@ -211,9 +211,9 @@ bot.dialog('/', [
 
                             }
 
-                            function SendInfoToExistingUser() {
+                            function SendInfoToExistingUser(numberOfTikets) {
 
-                                session.send("Good to have you back with me " + UserName + "! You have " + nresultLen + " open tickets must be resolved."); 
+                                session.send("Good to have you back with me " + UserName + "! You have " + numberOfTikets + " open tickets must be resolved."); 
 
                                 session.beginDialog("/location", { location: "path" });
 
@@ -569,7 +569,7 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.send("type /mtickets - to get a list of your tickets");
 
-        session.send("type /otickets - to get a list of your tickets");
+        session.send("type /otickets - to get a list of your open tickets");
 
         session.send("type /logout - to end our current discussion and start a new one");
 
