@@ -157,7 +157,7 @@ bot.dialog('/', [
     },
     function (session, results) {
 
-        UserEmail = results.response;
+        UserEmail = results.response.toLocaleLowerCase();
 
         session.userData.email = UserEmail;
 
