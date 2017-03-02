@@ -146,7 +146,7 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        session.send( "You are welcome to skip the registration process by typing 'SIGNIN' or by typing the ticketID 'ex:Sup12345' ");
+        session.send( "You are welcome to skip the registration process by typing '/signin' or '/help' to get my personal assistance ");
 
         session.sendTyping();
 
@@ -219,7 +219,7 @@ bot.dialog('/', [
 
                             }                            
 
-                        }  //ghjgjgjgh
+                        }  
                         
                         return;
                     }
