@@ -1106,7 +1106,7 @@ bot.dialog('/AdminActions', [
     },
     function (session, results) {
 
-        session.send("responses:" + responses);
+        session.send("back to dialog");
                     
     }
 ]);
