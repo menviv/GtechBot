@@ -25,6 +25,7 @@ var collTickets;
 var collCategories;
 var collOrgs;
 var collUsers;
+var collAdminRequests;
 
 // Initialize connection once
 
@@ -38,6 +39,7 @@ mongo.MongoClient.connect(connString, function(err, database) {
   collCategories = dbm.collection('Categories');
   collOrgs = dbm.collection('Orgs');
   collUsers = dbm.collection('Users');
+  collAdminRequests = dbm.collection('AdminRequests');
 
 });
 
@@ -577,6 +579,8 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.send("type /adminmode - well...this is a restricted area and for authorized users only.");
 
+        session.send("type /beadmin - and I can promise to consider your request");
+
         session.endDialog("Looking forward to your decision :)");
 
     }    
@@ -904,6 +908,12 @@ bot.dialog('AdminModeDialog', function (session, args) {
 
             session.beginDialog("/adminAuth");
 
+    } else if (args.topic == 'beadmin') {
+
+            session.endDialog();
+
+            session.beginDialog("/adminAuthRequests");
+
     }
 
 }).triggerAction({ 
@@ -911,10 +921,9 @@ bot.dialog('AdminModeDialog', function (session, args) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
             case '/adminmode':
-                // You can trigger the action with callback(null, 1.0) but you're also
-                // allowed to return additional properties which will be passed along to
-                // the triggered dialog.
-                callback(null, 1.0, { topic: 'adminmode' });
+                callback(null, 1.0, { topic: 'adminmode' }); 
+            case '/beadmin':
+                callback(null, 1.0, { topic: 'beadmin' });                 
                 break;
             default:
                 callback(null, 0.0);
@@ -960,6 +969,43 @@ bot.dialog('/AdminActions', [
         session.endDialog();
 
         session.beginDialog("/DefineNewOrgName");
+            
+    }
+]);
+
+
+
+
+
+bot.dialog('/adminAuthRequests', [
+    function (session) {
+
+        builder.Prompts.text(session, "Any comments that you would like to add that I should consider?:");
+
+    },
+    function (session, results) {
+
+        var AdmibRequestID = new mongo.ObjectID(); 
+
+            var AdminReqRecord = {
+                'CreatedTime': LogTimeStame,
+                'RequestByUserID': UserID,
+                '_id': AdmibRequestID,
+                'Comments': results.response,
+                'RequestType':'adminAuth',
+                'Name':OrgName,
+                'Status':'pending'
+            }    	
+            
+            collAdminRequests.insert(AdminReqRecord, function(err, result){
+
+            });
+
+        session.send("Thank you, promise to complete this one as quickly as possible and get back to you with my decision. By 'quickly' I mean not more than 24 hours... ");
+
+        session.endDialog();
+
+        session.beginDialog("/");
             
     }
 ]);
