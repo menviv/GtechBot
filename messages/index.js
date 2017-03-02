@@ -1212,10 +1212,10 @@ bot.dialog('/ticketPreview', [
 
         var ticketNumberToHandle = session.userData.ticketNumberToHandle;
 
-        session.send(ticketNumberToHandle);
+        var nticketNumberToHandle = ticketNumberToHandle.toString();
 
 
-                var cursor = collTickets.find({"ObjectNo": ticketNumberToHandle});
+                var cursor = collTickets.find({"ObjectNo": nticketNumberToHandle});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
