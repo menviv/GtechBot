@@ -1223,7 +1223,7 @@ bot.dialog('/ticketPreview', [
         
 
 
-                var cursor = collTickets.find({"ObjectNo": nticketNumberToHandle});
+                var cursor = collTickets.find({"ObjectNo": ticketNumberToHandle});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
