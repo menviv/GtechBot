@@ -1061,11 +1061,11 @@ bot.dialog('/respondToTicket', [
 
             session.userData.ticketNumberToHandle = ticketNO;  
 
-            builder.Prompts.text(session, "Your response will be:  ");   
+          //  builder.Prompts.text(session, "Your response will be:  ");   
 
         }
             
-    },    
+    }/*,    
     function (session, results) {
 
         var TicketResponse = results.response;
@@ -1094,7 +1094,7 @@ bot.dialog('/respondToTicket', [
             session.beginDialog("/ticketPreview");     
 
         
-    },
+    },*/
 ]);
 
 
