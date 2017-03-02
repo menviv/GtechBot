@@ -455,8 +455,6 @@ bot.dialog('/location', [
 
             session.userData.AdminReqType = destination;
 
-            session.endDialog();
-
             session.beginDialog("/adminGenReq");
 
         }
