@@ -1251,6 +1251,8 @@ bot.dialog('/ticketPreview', [
                     result.push(doc);
                 }); 
 
+                builder.Prompts.choice(session, "Preview?", ["Yes", "No"]);
+
 
     },
     function (session, results) {
