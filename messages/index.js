@@ -1106,10 +1106,69 @@ bot.dialog('/AdminActions', [
     },
     function (session, results) {
 
-        session.send("back to dialog");
+        var adminAction = session.userData.adminAction;
+        
+        if (adminAction == "Change ticket status") {
+
+            session.beginDialog("/changeTicketStatus"); 
+
+        } else {
+
+            session.beginDialog("/AdminActions"); 
+
+        }
+                    
+    },
+    function (session, results) {
+
+            session.send("Ticket was updated suceesfully");
+
+            session.beginDialog("/AdminActions"); 
                     
     }
+    
 ]);
+
+
+
+
+
+
+
+
+
+bot.dialog('/changeTicketStatus', [
+
+    function (session) {
+
+        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+
+        session.send("The current ticket no. is: " + ticketNumberToHandle);
+
+        builder.Prompts.choice(session, "Change the ticket status to:v", ["Closed", "In Process", "Pending Customer Response"]);
+
+
+    },
+    function (session, results) {
+
+        var ticketStatus = results.response.entity;
+
+        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+
+        var nticketNumberToHandle = parseInt(ticketNumberToHandle);
+
+        collTickets.update(
+        { "ObjectNo": nticketNumberToHandle },
+        { $set: { 'Status': ticketStatus, 'ChangedDate':LogTimeStame } })
+
+        session.endDialog();
+      
+    }
+]);
+
+
+
+
 
 
 
@@ -1220,12 +1279,6 @@ bot.dialog('/ticketPreview', [
 
         var nticketNumberToHandle = parseInt(ticketNumberToHandle);
 
-        session.send("ticketNumberToHandle:" + ticketNumberToHandle);
-
-        session.send("nticketNumberToHandle:" + nticketNumberToHandle);
-
-        
-
 
                 var cursor = collTickets.find({"ObjectNo": nticketNumberToHandle});
                 var result = [];
@@ -1251,11 +1304,15 @@ bot.dialog('/ticketPreview', [
                     result.push(doc);
                 }); 
 
-                builder.Prompts.choice(session, "Preview?", ["Yes", "No"]);
+                builder.Prompts.choice(session, "Your response was registered successfully! Would you like to:", ["Review current ticket", "Change ticket status", "Go back to Admin Panel"]);
 
 
     },
     function (session, results) {
+
+        var adminAction = results.response.entity;
+
+        if (adminAction == "Review current ticket") {
 
                 var ticketNumberToHandle = session.userData.ticketNumberToHandle;
 
@@ -1291,7 +1348,15 @@ bot.dialog('/ticketPreview', [
                             result.push(doc);
                         }); 
 
-                        session.endDialog();        
+                        session.endDialog();  
+
+        } else {
+
+            session.userData.adminAction = adminAction;
+
+            session.endDialog(); 
+
+        }     
 
             
     }
