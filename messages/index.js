@@ -78,6 +78,7 @@ var OrgName;
 var OrgID;
 var ResponseID;
 var numberOfTickets;
+var nonHandledObjects
 var responses;
 
 
@@ -385,6 +386,26 @@ bot.dialog('/signin', [
 
                                     numberOfTickets = result.length;
 
+                                    GetUserNonHandlededObjects();
+
+                              }
+                              result.push(doc);
+                    });
+
+
+        }
+
+        function GetUserNonHandlededObjects() {
+
+                var cursor = collTicketResponses.find({"UserID": UserID, "Status": "unread"});
+                var result = [];
+                    cursor.each(function(err, doc) {
+                              if(err)
+                                    throw err;
+                              if (doc === null) {
+
+                                    nonHandledObjects = result.length;
+
                                     SendInfoToExistingUser();
 
                               }
@@ -394,11 +415,15 @@ bot.dialog('/signin', [
 
         }
 
+
+
+        
+
         function SendInfoToExistingUser() {
 
             if (session.userData.Authanticated == 'True') {
 
-               session.send("Good to have you back with me " + UserName + "! You have " + numberOfTickets + " open tickets must be resolved."); 
+               session.send("Good to have you back with me " + UserName + "! You have " + numberOfTickets + " open tickets and " + nonHandledObjects + " responses from me and you still didn't review."); 
 
             } else {
 
