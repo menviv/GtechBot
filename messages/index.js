@@ -150,7 +150,7 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        session.send("Nice to meet you! my name is SupBot and I will do my best to assist you.");
+        session.send("Welcome! my name is SupBot and I will do my best to assist you.");
 
         session.sendTyping();
 
@@ -747,7 +747,7 @@ bot.dialog('/getUserQuestion', [
 
 bot.dialog('helpDialog', function (session, args) {
 
-    if (args.topic == 'help') {
+    if (args.topic == 'help' && session.userData.Authanticated == 'True') {
 
         session.sendTyping();
 
@@ -767,7 +767,14 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.endDialog("Looking forward to your decision :)");
 
-    }    
+    } else {
+
+        session.text("I share only with poeple that I know... let's try again?");
+
+        session.beginDialog("/validateUser"); 
+
+
+    }   
     
 }).triggerAction({ 
     onFindAction: function (context, callback) {
@@ -883,6 +890,57 @@ bot.dialog('myOpenticketsDialog', function (session, args) {
 
 
 
+
+
+
+
+bot.dialog('resetDialog', function (session, args) {
+
+    if (args.topic == 'ResetPassword') {
+
+        session.endDialog();
+
+        session.beginDialog("/ResetPassword");
+
+    }
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case '/reset':
+                // You can trigger the action with callback(null, 1.0) but you're also
+                // allowed to return additional properties which will be passed along to
+                // the triggered dialog.
+                callback(null, 1.0, { topic: 'ResetPassword' });
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
+
+
+
+bot.dialog('/ResetPassword', [
+
+    function (session) {
+
+        builder.Prompts.text(session, "What is your current Email?");
+ 
+
+    },
+    function (session, results) {
+
+         session.send("A new password was sent to your email.");
+
+         session.endConversation();
+
+         session.beginDialog("/");         
+
+    }
+]);
 
 
 
