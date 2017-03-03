@@ -149,17 +149,31 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        session.send("Welcome to Gtech support channel, my name is SupBot and I will do my best to assist you.");
+        session.send("Nice to meet you! my name is SupBot and I will do my best to assist you.");
 
         session.sendTyping();
 
-        session.send( "You are welcome to use my HOT KEYS to skip my over politeness, to review them just type '/help' ");
+        session.send( "Also, you are welcome to use my HOT KEYS to skip my over politeness, to review them just type '/help' ");
 
         session.sendTyping();
 
         session.beginDialog("/validateUser"); 
 
     },
+    function (session, results) {
+
+        if (session.userData.emailValidated == 'True') {
+
+            session.beginDialog("/signin"); 
+
+        } else {
+
+            //session.beginDialog("/RegisterUser"); 
+            session.send("I'm sorry, but I can't find your email on my lists.. please you contact me by Email to complete your registration");
+
+        }
+
+    },    
     function (session, results) {
 
         if (session.userData.Authanticated == 'True') {
@@ -172,14 +186,6 @@ bot.dialog('/', [
             session.send("Contact me by Email to complete your registration");
 
         }
-
-    },    
-    function (session, results) {
-
-     //   UserName = results.response;
-     //   session.userData.name = UserName;
-
-     //   builder.Prompts.choice(session, "One last quick question: Which of the following organizations you work for??", ["Aids Israel", "Annonimous", "888", "Other"]);
     },
 
     function (session, results) {
@@ -261,6 +267,92 @@ bot.dialog('/validateUser', [
 
                         if (result.length < 1) {
 
+                            session.userData.emailValidated == 'False';
+
+                            session.userData.email = "";
+
+                            NextToSignIn(); 
+
+                        } else {
+
+                            session.userData.emailValidated = 'True';
+
+                            UserName = result[0].Name;
+                            UserOrg = result[0].Org;
+                            UserID = result[0]._id;
+
+                            NextToSignIn();                          
+
+                        }  
+                        
+                        return;
+                    }
+                    // do something with each doc, like push Email into a results array
+                    result.push(doc);
+                });
+            
+        }
+
+
+
+
+        function NextToSignIn() {
+
+            if (session.userData.emailValidated == 'True') {
+
+               session.send("Good to have you back with me " + UserName); 
+
+               session.endDialog();
+
+            } else {
+
+                session.send("I don't really know you...");
+
+                session.endDialog();
+
+            }
+
+            
+
+        }         
+
+
+    }
+]);
+
+
+
+
+
+
+bot.dialog('/signin', [
+    function (session) {
+
+            builder.Prompts.text(session, "And your password?");
+
+    },
+    function (session, results) {
+
+        var UserPass = results.response;
+
+        session.send("Great! And don't worry, I will keep your privacy...");
+
+        ExecuteLogin();
+
+
+
+        function ExecuteLogin() {
+                
+                var cursor = collUsers.find({"Email": UserEmail, "password" : UserPass});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+                    if (doc === null) {
+                        // doc is null when the last document has been processed
+
+                        if (result.length < 1) {
+
                             session.userData.Authanticated = 'False';
 
                             SendInfoToExistingUser(); 
@@ -268,10 +360,6 @@ bot.dialog('/validateUser', [
                         } else {
 
                             session.userData.Authanticated = 'True';
-
-                            UserName = result[0].Name;
-                            UserOrg = result[0].Org;
-                            UserID = result[0]._id;
 
                             GetUserTicketingInfo();                          
 
@@ -314,7 +402,7 @@ bot.dialog('/validateUser', [
 
             } else {
 
-                session.send("I don't really know you...");
+                session.send("I think that I don't really know you...");
 
             }
 
@@ -325,6 +413,8 @@ bot.dialog('/validateUser', [
 
     }
 ]);
+
+
 
 
 
@@ -1126,7 +1216,7 @@ bot.dialog('/AdminActions', [
             session.beginDialog("/AdminActions"); 
                     
     }
-    
+
 ]);
 
 
