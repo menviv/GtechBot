@@ -343,7 +343,7 @@ bot.dialog('/signin', [
 
         function ExecuteLogin() {
                 
-                var cursor = collUsers.find({"Email": UserEmail, "password" : UserPass});
+                var cursor = collUsers.find({"Email": UserEmail, "Password" : UserPass});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
