@@ -563,7 +563,17 @@ var paths = {
     "feedback": { 
         description: "Help me to help you allocate the relevant ticket, ok?",
         commands: { "OK and I have a ticket Number": "feedbackwithTicketNo", "OK, show me the list of tickets with unread responses": "feedbackwithoutTicketNo" }
-    },     
+    }, 
+
+            "feedbackwithTicketNo": { 
+                description: "What is the severity of your question?",
+                commands: { "Urgent": "urgentques", "Normal": "normalques"  }
+            }, 
+
+            "feedbackwithoutTicketNo": { 
+                description: "What is the severity of your question?",
+                commands: { "Urgent": "urgentques", "Normal": "normalques"  }
+            },                   
 
     "request": { 
         description: "Your request is about...:",
@@ -694,7 +704,7 @@ bot.dialog('/location', [
 
         } else if (destination == 'feedbackwithoutTicketNo') {
 
-           session.beginDialog("/myTickets");
+           session.beginDialog("/respondToMtyTicket");
 
         } else if (destination == 'orgnotfound' || destination == 'setuserasadmin' || destination == 'requestelse' ) {
 
@@ -1353,6 +1363,101 @@ bot.dialog('/changeTicketStatus', [
 ]);
 
 
+
+
+
+
+
+
+
+
+bot.dialog('/respondToMtyTicket', [
+
+    function (session) {
+
+        session.sendTyping();
+
+        session.send("List of my open tickets:");
+
+
+                var cursor = collTickets.find({ "Status" : "new"});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    var nresultLen = result.length;
+
+                    if (nresultLen > 0 ) {
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
+
+                        }
+
+                        builder.Prompts.text(session, "Please provide me with the ticket number to load: "); 
+                        
+                    } else {
+
+                        session.send("Yu Pi Di Dey!!! There are no NEW tickets to handle!");
+
+                        session.beginDialog("/location", { location: "reAdminAuth" });
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                });  
+
+
+    },
+    function (session, results) {
+
+        if (session.userData.adminAuth = 'True') {
+
+            var ticketNO = results.response;
+
+            session.send("The chosen ticket is: " + ticketNO);
+
+            session.userData.ticketNumberToHandle = ticketNO;  
+
+            builder.Prompts.text(session, "Your response will be:  ");   
+
+        }
+            
+    },    
+    function (session, results) {
+
+        var TicketResponse = results.response;
+        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+
+        ResponseID = new mongo.ObjectID(); 
+
+            var TicketResponseRecord = {
+                'CreatedTime': LogTimeStame,
+                'UserID': UserID,
+                '_id': ResponseID,
+                'CreatedBy':UserName,
+                'CreatedByEmail':UserEmail,
+                'TicketNo':ticketNumberToHandle,
+                'ObjectFormat':'txt',
+                'ObjectTxt':TicketResponse,
+                'Status':'unread'
+            }    	
+            
+            collTicketResponses.insert(TicketResponseRecord, function(err, result){
+
+            }); 
+
+            session.endDialog();  
+        
+    },
+]);
 
 
 
