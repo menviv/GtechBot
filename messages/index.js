@@ -1380,7 +1380,7 @@ bot.dialog('/respondToMtyTicket', [
         session.send("List of my open tickets:");
 
 
-                var cursor = collTickets.find({ "Status" : "new"});
+                var cursor = collTickets.find({ "Status" : "new", "UserID" : UserID});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
@@ -1395,6 +1395,8 @@ bot.dialog('/respondToMtyTicket', [
                         for (var i=0; i<nresultLen; i++ ) {
 
                             session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
+
+                            session.userData.UserAuthResponse = 'True';
 
                         }
 
@@ -1418,7 +1420,7 @@ bot.dialog('/respondToMtyTicket', [
     },
     function (session, results) {
 
-        if (session.userData.adminAuth = 'True') {
+        if (session.userData.adminAuth == 'True' || session.userData.UserAuthResponse == 'True') {
 
             var ticketNO = results.response;
 
@@ -1453,6 +1455,8 @@ bot.dialog('/respondToMtyTicket', [
             collTicketResponses.insert(TicketResponseRecord, function(err, result){
 
             }); 
+
+            session.userData.UserAuthResponse == 'False';
 
             session.endDialog();  
         
