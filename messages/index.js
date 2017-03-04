@@ -547,7 +547,7 @@ var paths = {
 
     "path": { 
         description: "So now, how can I help you?",
-        commands: { "I have a question": "question", "I have a technical problem": "support", "I have a special request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
+        commands: { "I owe you my feedback on a ticket": "feedback", "I have a question": "question", "I have a technical problem": "support", "I have a special request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
     },
 
     "repath": { 
@@ -558,7 +558,12 @@ var paths = {
     "reAdminAuth": { 
         description: "Woul you like try again with me?",
         commands: { "Yes": "reAdminLogin", "Reset my token": "resettoken", "Go back to my tickets": "mytickets" , "Goodbye": "bye"   }
-    },    
+    },
+
+    "feedback": { 
+        description: "Help me to help you allocate the relevant ticket, ok?",
+        commands: { "OK and I have a ticket Number": "feedbackwithTicketNo", "OK, show me the list of tickets with unread responses": "feedbackwithoutTicketNo" }
+    },     
 
     "request": { 
         description: "Your request is about...:",
@@ -619,13 +624,13 @@ bot.dialog('/location', [
 
             session.replaceDialog("/location", { location: destination });
 
-        } else if (destination == 'question' || destination == 'support' || destination == 'request') {
+        } else if (destination == 'question' || destination == 'support' || destination == 'request' || destination == 'feedback') {
 
             session.sendTyping();
 
-            if (destination == 'question' || destination == 'request') {
+            if (destination == 'question' || destination == 'request' || destination == 'feedback') {
 
-                session.send("Got it, you have a " + destination);
+                session.send("Got it, you have a " + destination + " for me..");
 
             } else {
 
@@ -682,6 +687,14 @@ bot.dialog('/location', [
         } else if (destination == 'OKcallmeback') {
 
             session.beginDialog("/adminReqToCallBack");
+
+        } else if (destination == 'feedbackwithTicketNo') {
+
+           session.beginDialog("/UserResponseToTicket");
+
+        } else if (destination == 'feedbackwithoutTicketNo') {
+
+           session.beginDialog("/myTickets");
 
         } else if (destination == 'orgnotfound' || destination == 'setuserasadmin' || destination == 'requestelse' ) {
 
@@ -759,7 +772,7 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.send("use '/logout' - to end our current discussion and start a new one");
 
-        session.send("use '/restart' - to restart our current discussion");
+        session.send("use '/reset' - to reset your password");
 
         session.send("use '/adminmode' - well...this is a restricted area and for authorized users only.");
 
