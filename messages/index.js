@@ -1338,9 +1338,24 @@ bot.dialog('/AdminActions', [
     },
     function (session, results) {
 
-        session.send("Let me show you a quick preview on the ticket..");
-        
-        session.beginDialog("/ticketPreview"); 
+        if (session.userData.newUserRecord == "True") {
+
+            session.send("Yeah! I was able to create the new user record successfully!");
+
+            session.beginDialog("/AdminActions");
+
+            session.userData.newUserRecord = "False";
+
+
+        } else {
+
+            session.send("Let me show you a quick preview on the ticket..");
+            
+            session.beginDialog("/ticketPreview"); 
+
+        }
+
+
             
     },
     function (session, results) {
@@ -1963,11 +1978,11 @@ bot.dialog('/CreateNewUser', [
             
             collUsers.insert(NewUserRecord, function(err, result){
 
-            });       
+            }); 
+
+        session.userData.newUserRecord = "True";          
 
         session.endDialog();
-
-        session.beginDialog("/AdminActions");
 
     }
 ]);
