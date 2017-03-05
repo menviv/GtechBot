@@ -1443,9 +1443,9 @@ bot.dialog('/SearchTicket', [
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
-                                            builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather"),
-                                            builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather"),
-                                            builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather")
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
                                         ])
                                 ]);
                             session.send(msg);
@@ -1469,13 +1469,39 @@ bot.dialog('/SearchTicket', [
 ]);
 
 
-bot.dialog('/weather', [
+bot.dialog('/AddCommentToTicket', [
     function (session, args) {
         session.endDialog("The weather in %s is 71 degrees and raining.", args.data);
     }
 ]);
-bot.beginDialogAction('weather', '/weather'); 
+bot.beginDialogAction('comment', '/AddCommentToTicket'); 
 
+
+
+
+bot.dialog('/ReviewTicket', [
+    function (session, args) {
+        session.endDialog("The weather in %s is 71 degrees and raining.", args.data);
+    }
+]);
+bot.beginDialogAction('review', '/ReviewTicket'); 
+
+
+
+
+bot.dialog('/CloseTicket', [
+    function (session, args) {
+
+        var nticketNumberToHandle = parseInt(args.data);
+
+        collTickets.update(
+        { "ObjectNo": nticketNumberToHandle },
+        { $set: { 'Status': 'Closed', 'ChangedDate':LogTimeStame } })
+
+        session.endDialog("Ticket %s is now set to 'Closed'", args.data);
+    }
+]);
+bot.beginDialogAction('close', '/CloseTicket'); 
 
 
 
