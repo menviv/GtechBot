@@ -1402,7 +1402,7 @@ bot.dialog('/SearchTicket', [
     },
     function (session, results) {
 
-        var SearchValue = results.response;
+        var SearchValue = results.response.toString();
 
         var o_ID = new mongo.ObjectID(UserID);
 
