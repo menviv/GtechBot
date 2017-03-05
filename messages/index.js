@@ -1430,6 +1430,7 @@ bot.dialog('/SearchTicket', [
                             //ticketsArray.push(result[i].ObjectNo);
 
 
+
                             var msg = new builder.Message(session)
                                 .textFormat(builder.TextFormat.xml)
                                 .attachments([
@@ -1442,7 +1443,7 @@ bot.dialog('/SearchTicket', [
                                         ])
                                         .tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                 ]);
-                            session.endDialog(msg);
+                            session.send(msg);
 
 
 
