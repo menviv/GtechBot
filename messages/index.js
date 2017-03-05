@@ -149,6 +149,8 @@ bot.dialog('/', [
 
     session.send(reply);
 
+        if (session.userData.Authanticated != 'True') {
+
         session.sendTyping();
 
         session.send("Welcome! my name is SupBot and I will do my best to assist you.");
@@ -160,6 +162,12 @@ bot.dialog('/', [
         session.sendTyping();
 
         session.beginDialog("/validateUser"); 
+
+        } else {
+
+            session.beginDialog("/location", { location: "repath" });
+
+        }
 
     },
     function (session, results) {
