@@ -1443,7 +1443,7 @@ bot.dialog('/SearchTicket', [
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
-                                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Get Started')
+                                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Review', 'https://docs.botframework.com/en-us/', 'Review2')
                                         ])
                                 ]);
                             session.send(msg);
