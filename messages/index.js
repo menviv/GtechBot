@@ -318,7 +318,7 @@ bot.dialog('/validateUser', [
 
                         session.send("dddddddd: " + result);
 
-                        if (result == []) {
+                        if (result[0].Name == '') {
 
                             session.userData.emailValidated == 'False';
 
