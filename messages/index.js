@@ -220,9 +220,15 @@ bot.dialog('/', [
 
         } else if (session.userData.emailValidated == 'False') {
 
-            session.send("I'm sorry, but I can't find your email on my lists.. please leave a message to my supervisor and he will perform his magics...");
+            session.send("I'm sorry, but I can't find your email on my lists..");
 
             session.beginDialog("/ErrorAllocateEmail"); 
+
+        } else if (session.userData.emailValidated == 'Error') {
+
+            session.send("Thank you for your patiance");
+
+            session.userData.emailValidated = '';
 
         }
 
@@ -588,6 +594,8 @@ bot.dialog('/ErrorAllocateEmail', [
             session.send("Ok, I've just notified my supervisorand he said he will cantact you directly within the next 24 hours. ");
 
             session.send("I hope that helps...");
+
+            session.userData.emailValidated = 'Error';
 
             session.endDialog();
      
