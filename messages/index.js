@@ -619,10 +619,16 @@ var paths = {
         description: "I guess that you need my help with a technical issue, right? what is it related to:",
         commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
     }, 
+
     "callmeback": { 
         description: "OK.. ok... calm down, I will find an availble humen being and ask him to call you ASAP...",
         commands: { "OK": "OKcallmeback", "OK and Let me open a ticket": "path", "Goodbye": "bye"  }
     }, 
+
+    "userAttachment": { 
+        description: "Please provide an attachement",
+        commands: { "OK": "something", "NO": "somethingno" }
+    },  
 
 }
 
