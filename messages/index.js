@@ -1400,7 +1400,9 @@ bot.dialog('/SearchTicket', [
 
         var SearchValue = results.response;
 
-            var cursor = collTickets.find({$text: {$search: SearchValue}});
+        var o_ID = new mongo.ObjectID(UserID);
+
+            var cursor = collTickets.find({ "UserID" : o_ID, $text: {$search: SearchValue}});
 
                 var result = [];
                 cursor.each(function(err, doc) {
