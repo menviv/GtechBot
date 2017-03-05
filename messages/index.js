@@ -1910,6 +1910,68 @@ bot.dialog('/adminReqToCallBack', [
 
 
 
+bot.dialog('/CreateNewUser', [
+    function (session) {
+
+        builder.Prompts.text(session, "Let's start by Full Name:");
+
+    },
+    function (session, results) {
+
+        session.userData.newUserName = results.response;
+
+        builder.Prompts.text(session, "Email Address:");
+            
+    },
+    function (session, results) {
+
+        session.userData.newUserEmail = results.response.toLocaleLowerCase();
+
+        builder.Prompts.text(session, "Login Password:");
+            
+    },
+    function (session, results) {
+
+        session.userData.newUserPassword = results.response;
+
+        builder.Prompts.choice(session, "Profile:", ["Standard User", "Admin"]);
+            
+    },
+    function (session, results) {
+
+        session.userData.Profile = results.response;
+
+        builder.Prompts.choice(session, "Org:", ["HIV.ORG.IL", "888", "Annonimouse", "Gtech"]);
+            
+    },
+    function (session, results) {
+
+        session.userData.newUserOrg = results.response.entity;
+
+            var NewUserRecord = {
+                'CreatedTime': LogTimeStame,
+                'CreatedByUserID': UserID,
+                "CreatedBy": UserName,
+                "ObjectType": "UserRecord",
+                'Profile': session.userData.newUserProfile,
+                'Email':session.userData.newUserEmail,
+                'Name':session.userData.newUserName,
+                'Password':session.userData.newUserPassword,
+                'Org':session.userData.newUserOrg,
+                'Status':'Active'
+            }    	
+            
+            collUsers.insert(NewUserRecord, function(err, result){
+
+            });       
+
+        session.endDialog();
+
+        session.beginDialog("/AdminActions");
+
+    }
+]);
+
 
 bot.dialog('/DefineNewOrgName', [
     function (session) {
