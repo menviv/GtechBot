@@ -845,11 +845,10 @@ bot.dialog('/getUserQuestion', [
 
          if (results.response) {
 
-                if (results.response) {
-                console.log('File received.');
-                } else {
-                console.log('No file received.');
-                }
+                session.send('File received.');
+         } else {
+                 session.send('No file received.');
+
 
             //session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
 
