@@ -80,6 +80,7 @@ var ResponseID;
 var numberOfTickets;
 var nonHandledObjects
 var responses;
+var ticketsArray = [];
 
 
 
@@ -1375,8 +1376,6 @@ bot.dialog('/respondToMtyTicket', [
 
     function (session) {
 
-        var ticketsArray = [];
-
         session.sendTyping();
 
         session.send("List of your open tickets:");
@@ -1400,8 +1399,6 @@ bot.dialog('/respondToMtyTicket', [
 
                             ticketsArray.push(result[i].ObjectNo);
 
-                            session.userData.UserAuthResponse = 'True';
-
                         }
 
                         builder.Prompts.text(session, "Please provide me with the ticket number to load: "); 
@@ -1424,8 +1421,6 @@ bot.dialog('/respondToMtyTicket', [
     },
     function (session, results) {
 
-        if (session.userData.UserAuthResponse == 'True') {
-
             var ticketNO = results.response;
 
             session.send("The chosen ticket is: " + ticketNO);
@@ -1435,8 +1430,6 @@ bot.dialog('/respondToMtyTicket', [
             session.userData.ticketNumberToHandle = ticketNO;  
 
             builder.Prompts.text(session, "Your response will be:  ");   
-
-        }
             
     },    
     function (session, results) {
