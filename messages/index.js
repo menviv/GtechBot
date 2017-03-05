@@ -826,7 +826,7 @@ bot.dialog('helpDialog', function (session, args) {
 });
 
 
-bot.dialog('restartDialog', function (session, args) {
+bot.dialog('homeDialog', function (session, args) {
 
     session.endDialog();
 
@@ -852,11 +852,13 @@ bot.dialog('restartDialog', function (session, args) {
 
 bot.dialog('logoutDialog', function (session, args) {
 
-    session.endDialog("GtechBot is logging out");
+    session.endDialog("Goodbye.... I'm ending our conversation now by logging out...");
 
     if (args.topic == 'logout') {
 
         session.endConversation();
+
+        session.userData.Authanticated = 'False';
 
         session.beginDialog("/");
 
