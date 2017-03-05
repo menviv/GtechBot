@@ -835,13 +835,9 @@ bot.dialog('/getUserQuestion', [
 
             });
 
-            //session.endDialog();
+           //session.beginDialog("/location", { location: "repath" });
 
-            //session.beginDialog("/location", { location: "userAttachment" });
-
-           // builder.Prompts.attachment(session, "By the way... screenshots or any visual element will help me to help you.. ");
-
-           session.beginDialog("/location", { location: "repath" });
+           builder.Prompts.attachment(session, 'Please give me a file...');
             
         } 
     },
@@ -857,6 +853,23 @@ bot.dialog('/getUserQuestion', [
             
         } 
     }
+]);
+
+
+
+
+
+bot.add('/', [
+  (session) => {
+    builder.Prompts.attachment(session, 'Please give me a file...');
+  },
+  (session, results, next) => {
+    if (results.response) {
+      console.log('File received.');
+    } else {
+      console.log('No file received.');
+    }
+  }
 ]);
 
 
