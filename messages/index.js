@@ -1433,13 +1433,27 @@ bot.dialog('/respondToMtyTicket', [
 
             var ticketNO = results.response;
 
-            session.send("The chosen ticket is: " + ticketNO);
+            var valdatedTicket = ticketsArray.indexOf(ticketNO);
 
-            session.send("The chosen ticketsArray is: " + ticketsArray);
+            if (valdatedTicket>0) {
 
-            session.userData.ticketNumberToHandle = ticketNO;  
+                session.send("The chosen ticket is: " + ticketNO);
 
-            builder.Prompts.text(session, "Your response will be:  ");   
+                session.userData.ticketNumberToHandle = ticketNO;  
+
+                builder.Prompts.text(session, "Your response will be:  ");  
+
+            } else {
+
+                session.userData.UserAuthResponse = 'false';
+
+                session.send("I'm sorry but the ticket number you specified is not valid, let's try again.");
+
+                session.replaceDialog("/location", { location: "path" });  
+
+            }
+
+ 
             
     },    
     function (session, results) {
