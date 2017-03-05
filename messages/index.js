@@ -773,6 +773,8 @@ bot.dialog('/getUserQuestion', [
 
             });
 
+            session.endDialog();
+
             session.beginDialog("/location", { location: "userAttachment" });
             
         } else {
