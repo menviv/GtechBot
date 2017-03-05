@@ -1310,7 +1310,7 @@ bot.dialog('beAdminModeDialog', function (session, args) {
 bot.dialog('/AdminActions', [
     function (session) {
 
-        builder.Prompts.choice(session, "Administrator functions?", ["Respond To Ticket", "Create New Org", "Create New User", "Open Tickets"]);
+        builder.Prompts.choice(session, "Administrator functions?", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets"]);
 
     },
     function (session, results) {
@@ -1324,6 +1324,10 @@ bot.dialog('/AdminActions', [
         } else if (adminActions == 'Create New User') {
 
             session.beginDialog("/CreateNewUser");
+            
+        } else if (adminActions == 'User List') {
+
+            session.beginDialog("/GetUserList");
             
         } else if (adminActions == 'Respond To Ticket') {
 
@@ -1346,6 +1350,12 @@ bot.dialog('/AdminActions', [
 
             session.userData.newUserRecord = "False";
 
+
+        } else if (session.userData.GetUserList == "True") {
+
+            session.beginDialog("/AdminActions");
+
+            session.userData.GetUserList = "False";
 
         } else {
 
@@ -1921,6 +1931,53 @@ bot.dialog('/adminReqToCallBack', [
      
     }
 ]);
+
+
+
+
+
+
+
+
+
+bot.dialog('/GetUserList', [
+    function (session) {
+
+        session.send("These are my users:");
+
+        var cursor = collUsers.find({"Status" : "Active"});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+            if (doc === null) {
+
+               var nresultLen = result.length;
+
+               for (var i=0; i<nresultLen; i++ ) {
+
+                   session.send(result[i].Name + ": " + result[i].Email + " | " + result[i].Org + " | " + result[i].Status );
+
+               }
+
+                return;
+            }
+            // do something with each doc, like push Email into a results array
+            result.push(doc);
+        });      
+
+    },
+    function (session, results) {
+
+        session.userData.GetUserList = "True";          
+
+        session.endDialog();
+            
+    }
+]);
+
+
+
 
 
 
