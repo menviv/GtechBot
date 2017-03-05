@@ -1433,7 +1433,7 @@ bot.dialog('/SearchTicket', [
                             var msg = new builder.Message(session)
                                 .textFormat(builder.TextFormat.xml)
                                 .attachments([
-                                    new builder.HeroCard(session)
+                                    new builder.ThumbnailCard(session)
                                         .title('Ticket Card No: ' + result[i].ObjectNo)
                                         .subtitle(result[i].ObjectTxt)
                                         .text("The <b>Space Needle</b> is an observation tower in Seattle, Washington, a landmark of the Pacific Northwest, and an icon of Seattle.")
