@@ -395,11 +395,13 @@ bot.dialog('/signin', [
 
                                     numberOfTickets = result.length;
 
-                                    GetUserNonHandlededObjects();
+                                    //GetUserNonHandlededObjects();
 
                               }
                               result.push(doc);
                     });
+
+                    GetUserNonHandlededObjects();
 
 
         }
@@ -415,11 +417,13 @@ bot.dialog('/signin', [
 
                                     nonHandledObjects = result.length;
 
-                                    SendInfoToExistingUser();
+                                    //SendInfoToExistingUser();
 
                               }
                               result.push(doc);
                     });
+
+                    SendInfoToExistingUser();
 
 
         }
