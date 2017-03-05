@@ -318,15 +318,7 @@ bot.dialog('/validateUser', [
 
                         session.send("dddddddd: " + result.length);
 
-                        if (!result) {
-
-                            session.userData.emailValidated == 'False';
-
-                            session.userData.email = "";
-
-                            EmailNotFound(); 
-
-                        } else {
+                        if (result.length == 1) {
 
                             session.userData.emailValidated = 'True';
 
@@ -334,7 +326,15 @@ bot.dialog('/validateUser', [
                             UserOrg = result[0].Org;
                             UserID = result[0]._id;
 
-                            NextToSignIn();                          
+                            NextToSignIn();                            
+
+                        } else {
+
+                            session.userData.emailValidated == 'False';
+
+                            session.userData.email = "";
+
+                            EmailNotFound();                           
 
                         }  
                         
