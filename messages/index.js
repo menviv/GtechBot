@@ -239,12 +239,7 @@ bot.dialog('/', [
 
             session.beginDialog("/location", { location: "path" });
 
-        } else {
-
-            //session.beginDialog("/RegisterUser"); 
-            session.send("Contact me by Email to complete your registration");
-
-        }
+        } 
     },
 
     function (session, results) {
@@ -572,7 +567,7 @@ bot.dialog('/validateOrg', [
 bot.dialog('/ErrorAllocateEmail', [
     function (session) {
 
-        builder.Prompts.text(session, "Any comments that you would like me to share with the supervisor?");
+        builder.Prompts.text(session, "I need to contact my supervisor and ask for his advice. Any comments that you would like me to share with him?");
 
     },
     function (session, results) {
