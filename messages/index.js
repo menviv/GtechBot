@@ -1375,9 +1375,11 @@ bot.dialog('/respondToMtyTicket', [
 
     function (session) {
 
+        var ticketsArray = [];
+
         session.sendTyping();
 
-        session.send("List of my open tickets:");
+        session.send("List of your open tickets:");
 
 
                 var cursor = collTickets.find({ "Status" : "new", "UserID" : UserID});
@@ -1395,6 +1397,8 @@ bot.dialog('/respondToMtyTicket', [
                         for (var i=0; i<nresultLen; i++ ) {
 
                             session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
+
+                            ticketsArray.push(result[i].ObjectNo);
 
                             session.userData.UserAuthResponse = 'True';
 
@@ -1425,6 +1429,8 @@ bot.dialog('/respondToMtyTicket', [
             var ticketNO = results.response;
 
             session.send("The chosen ticket is: " + ticketNO);
+
+            session.send("The chosen ticketsArray is: " + ticketsArray);
 
             session.userData.ticketNumberToHandle = ticketNO;  
 
