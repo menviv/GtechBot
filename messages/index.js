@@ -855,7 +855,7 @@ bot.dialog('/getUserQuestion', [
     }
 ]);
 
-
+/*
 
 
 
@@ -872,7 +872,7 @@ bot.add('/', [
   }
 ]);
 
-
+*/
 
 
 
