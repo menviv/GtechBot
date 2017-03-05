@@ -837,7 +837,7 @@ bot.dialog('/getUserQuestion', [
 
            //session.beginDialog("/location", { location: "repath" });
 
-           builder.Prompts.attachment(session, 'Please give me a file...');
+           builder.Prompts.attachment(session, 'Can you attach a screeshot that will help me better understanbd your request?');
             
         } 
     },
@@ -845,8 +845,10 @@ bot.dialog('/getUserQuestion', [
 
          if (results.response) {
 
-                session.send('File received.');
+                session.send('File received.' + results.response);
+
          } else {
+
                  session.send('No file received.');
 
 
