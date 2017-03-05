@@ -316,7 +316,7 @@ bot.dialog('/validateUser', [
                     if (doc === null) {
                         // doc is null when the last document has been processed
 
-                        session.send(result.length);
+                        session.send(result[0]._id);
 
                         if (result.length < 1) {
 
