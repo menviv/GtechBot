@@ -773,7 +773,7 @@ bot.dialog('/getUserQuestion', [
 
             });
 
-            session.replaceDialog("/location", { location: "userAttachment" });
+            session.beginDialog("/location", { location: "userAttachment" });
             
         } else {
             session.send("ok");
@@ -800,7 +800,7 @@ bot.dialog('/getUserAttachQuestion', [
 
             //session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
 
-            session.replaceDialog("/location", { location: "repath" });
+            session.beginDialog("/location", { location: "repath" });
             
         } else {
             session.send("ok");
