@@ -81,6 +81,7 @@ var numberOfTickets;
 var nonHandledObjects
 var responses;
 var ticketsArray = [];
+var TicketNumber;
 
 
 
@@ -695,6 +696,10 @@ bot.dialog('/location', [
 
             session.beginDialog("/getUserQuestion");
 
+        } else if (destination == 'userAttachment') {
+
+            session.beginDialog("/getUserAttachQuestion");
+
         } else if (destination == 'mytickets') {
 
             session.beginDialog("/myTickets");
@@ -747,7 +752,7 @@ bot.dialog('/getUserQuestion', [
 
             TicketID = new mongo.ObjectID(); 
 
-            var TicketNo = Math.floor(Math.random()*90000) + 10000;
+            TicketNumber = Math.floor(Math.random()*90000) + 10000;
 
             var TicketRecord = {
                 'CreatedTime': LogTimeStame,
@@ -768,17 +773,46 @@ bot.dialog('/getUserQuestion', [
 
             });
 
-            session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
-
-            session.endDialog();
-
-            session.beginDialog("/location", { location: "repath" });
+            session.replaceDialog("/location", { location: "userAttachment" });
             
         } else {
             session.send("ok");
         }
     }
 ]);
+
+
+
+
+bot.dialog('/getUserAttachQuestion', [
+    function (session) {
+
+            builder.Prompts.attachment(session, "By the way... screenshots or any visual element will help me to help you.. ");
+
+    },
+    function (session, results) {
+
+        if (results.response) {
+
+            
+
+            session.send(results.response);
+
+            //session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
+
+            session.replaceDialog("/location", { location: "repath" });
+            
+        } else {
+            session.send("ok");
+        }
+    }
+]);
+
+
+
+
+
+
 
 
 bot.dialog('helpDialog', function (session, args) {
