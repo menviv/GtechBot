@@ -322,7 +322,7 @@ bot.dialog('/validateUser', [
 
                             session.userData.email = "";
 
-                            NextToSignIn(); 
+                            EmailNotFound(); 
 
                         } else {
 
@@ -355,7 +355,14 @@ bot.dialog('/validateUser', [
 
                session.endDialog();
 
-            } else {
+            }
+
+        } 
+
+
+        function EmailNotFound() {
+
+            if (session.userData.emailValidated != 'True') {
 
                 session.send("I don't really know you...");
 
@@ -363,11 +370,9 @@ bot.dialog('/validateUser', [
 
                 session.beginDialog("/");
 
-            }
+            } 
 
-            
-
-        }         
+        }                  
 
 
     }
