@@ -1444,6 +1444,7 @@ bot.dialog('/SearchTicket', [
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
                                             builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
                                             builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
                                             builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
                                         ])
@@ -1502,6 +1503,22 @@ bot.dialog('/CloseTicket', [
     }
 ]);
 bot.beginDialogAction('close', '/CloseTicket'); 
+
+
+
+bot.dialog('/ReOpenTicket', [
+    function (session, args) {
+
+        var nticketNumberToHandle = parseInt(args.data);
+
+        collTickets.update(
+        { "ObjectNo": nticketNumberToHandle },
+        { $set: { 'Status': 'new', 'ChangedDate':LogTimeStame } })
+
+        session.endDialog("Ticket %s is now set to 'Open'", args.data);
+    }
+]);
+bot.beginDialogAction('reopen', '/ReOpenTicket'); 
 
 
 
