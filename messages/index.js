@@ -1460,9 +1460,7 @@ bot.dialog('/respondToMtyTicket', [
 
             session.send("Thank you for this, I will review your response and feedback in the next few hours.");
 
-            session.replaceDialog("/location", { location: "repath" }); 
-
-            session.endDialog();  
+            session.replaceDialog("/location", { location: "repath" });  
         
     },
 ]);
