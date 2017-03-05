@@ -803,6 +803,7 @@ bot.dialog('/location', [
 
 
 bot.dialog('/getUserQuestion', [
+
     function (session) {
 
             builder.Prompts.text(session, "So... what are you waiting for? ask me anything... "); 
@@ -846,6 +847,12 @@ bot.dialog('/getUserQuestion', [
          if (results.response) {
 
                 session.send('File received.' + results.response);
+
+                var o_ID = new mongo.ObjectID(TicketID); 
+
+                        collTickets.update (
+                        { "_id": o_ID },
+                        { $set: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame } })
 
          } else {
 
@@ -1078,7 +1085,7 @@ bot.dialog('/myTickets', [
 
         session.send("Your tickets: ");
 
-        var o_ID = new mongo.ObjectID(UserID);
+        var o_ID = new mongo.ObjectID(UserID); 
 
         var cursor = collTickets.find({"UserID": o_ID});
         var result = [];
@@ -1511,7 +1518,7 @@ bot.dialog('/CloseTicket', [
 
         var nticketNumberToHandle = parseInt(args.data);
 
-        collTickets.update(
+        collTickets.update (
         { "ObjectNo": nticketNumberToHandle },
         { $set: { 'Status': 'Closed', 'ChangedDate':LogTimeStame } })
 
