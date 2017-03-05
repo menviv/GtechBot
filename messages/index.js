@@ -766,7 +766,7 @@ bot.dialog('/getUserQuestion', [
                 '_id': TicketID,
                 'CreatedBy':UserName,
                 'CreatedByEmail':UserEmail,
-                'ObjectNo':TicketNo,
+                'ObjectNo':TicketNumber,
                 'ObjectReason':session.userData.engagementReason,
                 'ObjectType':session.userData.engagementReasonAppType,
                 'ObjectSevirityLevel':session.userData.engagementReasonSevirityLevel,
