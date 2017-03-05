@@ -609,7 +609,7 @@ var paths = {
 
     "reAdminAuth": { 
         description: "Woul you like try again with me?",
-        commands: { "Yes": "reAdminLogin", "Reset my token": "resettoken", "Go back to my tickets": "mytickets" , "Goodbye": "bye"   }
+        commands: { "Yes": "reAdminLogin", "Reset my token": "resettoken", "Go back to my tickets": "mytickets" , "Goodbye": "goodbye"   }
     },
 
     "feedback": { 
@@ -747,6 +747,10 @@ bot.dialog('/location', [
         } else if (destination == 'mytickets') {
 
             session.beginDialog("/myTickets");
+
+        } else if (destination == 'goodbye') {
+
+            session.beginDialog("logoutDialog");
 
         } else if (destination == 'reAdminLogin') {
 
