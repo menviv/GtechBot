@@ -368,7 +368,7 @@ bot.dialog('/validateUser', [
 
                 session.endDialog();
 
-                session.beginDialog("/");
+                //session.beginDialog("/");
 
         }                  
 
