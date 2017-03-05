@@ -1417,15 +1417,36 @@ bot.dialog('/SearchTicket', [
 
                     var nresultLen = result.length;
 
+                    var ThumbnailCardName = 'Thumbnail card';
+
                     if (nresultLen > 0 ) {
 
                         session.send("Ready? so this is what I was able to find:");
 
                         for (var i=0; i<nresultLen; i++ ) {
 
-                            session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
+                            //session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
 
-                            ticketsArray.push(result[i].ObjectNo);
+                            //ticketsArray.push(result[i].ObjectNo);
+
+
+                            function createThumbnailCard(session) {
+                                return new builder.ThumbnailCard(session)
+                                    .title('Ticket Card No: ' + result[i].ObjectNo)
+                                    .subtitle(result[i].ObjectTxt)
+                                    .text(' Slack, Office 365 mail and other popular services.')
+                                    .images([
+                                        builder.CardImage.create(session, 'https://www.arlnow.com/wp-content/uploads/2013/12/Theft-bots.jpg')
+                                    ])
+                                    .buttons([
+                                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Get Started')
+                                    ]);
+                            }
+
+
+                            var msg = new builder.Message(session).addAttachment(ThumbnailCardName);
+
+                            session.send(msg);
 
                         }
                         
