@@ -1443,6 +1443,8 @@ bot.dialog('/SearchTicket', [
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
+                                            builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather"),
+                                            builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather"),
                                             builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather")
                                         ])
                                 ]);
