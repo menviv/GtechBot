@@ -892,6 +892,8 @@ bot.dialog('logoutDialog', function (session, args) {
 
         session.userData.Authanticated = 'False';
 
+        session.userData.adminTokenReset == 'False'
+
         session.beginDialog("/");
 
     }
@@ -1265,7 +1267,17 @@ bot.dialog('adminModeDialog', function (session, args) {
 
             session.endDialog();
 
-            session.beginDialog("/adminAuth");
+            if (session.userData.adminTokenReset == 'True') {
+
+                session.beginDialog("/AdminActions");
+
+
+            } else {
+
+                session.beginDialog("/adminAuth");
+            }
+
+            
 
 }).triggerAction({ 
     onFindAction: function (context, callback) {
@@ -1309,6 +1321,7 @@ bot.dialog('beAdminModeDialog', function (session, args) {
 
 bot.dialog('/AdminActions', [
     function (session) {
+        
 
         builder.Prompts.choice(session, "Administrator functions?", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets"]);
 
