@@ -1441,7 +1441,10 @@ bot.dialog('/SearchTicket', [
                                         .images([
                                             builder.CardImage.create(session, 'https://www.arlnow.com/wp-content/uploads/2013/12/Theft-bots.jpg')
                                         ])
-                                        .tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Get Started')
+                                        ])
                                 ]);
                             session.send(msg);
 
