@@ -783,7 +783,9 @@ bot.dialog('/getUserQuestion', [
 
             //session.beginDialog("/location", { location: "userAttachment" });
 
-            builder.Prompts.attachment(session, "By the way... screenshots or any visual element will help me to help you.. ");
+           // builder.Prompts.attachment(session, "By the way... screenshots or any visual element will help me to help you.. ");
+
+           session.beginDialog("/location", { location: "repath" });
             
         } 
     },
