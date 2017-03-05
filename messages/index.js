@@ -1323,7 +1323,7 @@ bot.dialog('/AdminActions', [
     function (session) {
         
 
-        builder.Prompts.choice(session, "Administrator functions?", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets"]);
+        builder.Prompts.choice(session, "[Admin mode] Administrator functions", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets"]);
 
     },
     function (session, results) {
@@ -1372,7 +1372,7 @@ bot.dialog('/AdminActions', [
 
         } else {
 
-            session.send("Let me show you a quick preview on the ticket..");
+            session.send("[Admin mode] Let me show you a quick preview on the ticket..");
             
             session.beginDialog("/ticketPreview"); 
 
@@ -1956,7 +1956,7 @@ bot.dialog('/adminReqToCallBack', [
 bot.dialog('/GetUserList', [
     function (session) {
 
-        session.send("These are my users:");
+        session.send("[Admin mode] These are my users:");
 
         var cursor = collUsers.find({"Status" : "Active"});
         var result = [];
@@ -1998,35 +1998,35 @@ bot.dialog('/GetUserList', [
 bot.dialog('/CreateNewUser', [
     function (session) {
 
-        builder.Prompts.text(session, "Let's start by Full Name:");
+        builder.Prompts.text(session, "[Admin mode] Let's start by Full Name:");
 
     },
     function (session, results) {
 
         session.userData.newUserName = results.response;
 
-        builder.Prompts.text(session, "Email Address:");
+        builder.Prompts.text(session, "[Admin mode] Email Address:");
             
     },
     function (session, results) {
 
         session.userData.newUserEmail = results.response.toLocaleLowerCase();
 
-        builder.Prompts.text(session, "Login Password:");
+        builder.Prompts.text(session, "[Admin mode] Login Password:");
             
     },
     function (session, results) {
 
         session.userData.newUserPassword = results.response;
 
-        builder.Prompts.choice(session, "Profile:", ["Standard User", "Admin"]);
+        builder.Prompts.choice(session, "[Admin mode] Profile:", ["Standard User", "Admin"]);
             
     },
     function (session, results) {
 
         session.userData.Profile = results.response;
 
-        builder.Prompts.choice(session, "Org:", ["HIV.ORG.IL", "888", "Annonimouse", "Gtech"]);
+        builder.Prompts.choice(session, "[Admin mode] Org:", ["HIV.ORG.IL", "888", "Annonimouse", "Gtech"]);
             
     },
     function (session, results) {
@@ -2061,7 +2061,7 @@ bot.dialog('/CreateNewUser', [
 bot.dialog('/DefineNewOrgName', [
     function (session) {
 
-        builder.Prompts.text(session, "Name of organization:");
+        builder.Prompts.text(session, "[Admin mode] Name of organization:");
 
     },
     function (session, results) {
