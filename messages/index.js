@@ -712,6 +712,12 @@ bot.dialog('/location', [
 
             session.beginDialog("/adminGenReq");
 
+        }  else if (session.userData.userRepondedToTicket == 'True' ) {
+
+            session.send("Thank you for this, I will review your response and feedback in the next few hours.");
+
+            session.replaceDialog("/location", { location: "repath" }); 
+
         }
         
     }
@@ -1456,7 +1462,11 @@ bot.dialog('/respondToMtyTicket', [
 
             }); 
 
-            session.userData.UserAuthResponse == 'False';
+            session.userData.UserAuthResponse = 'false';
+
+            session.userData.userRepondedToTicket = 'True';
+
+            
 
             session.endDialog();  
         
