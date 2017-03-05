@@ -296,11 +296,11 @@ bot.dialog('/validateUser', [
 
         UserEmail = results.response.toLocaleLowerCase();
 
-        session.userData.email = UserEmail;
+        //session.userData.email = UserEmail;
 
-        session.sendTyping();
+       // session.sendTyping();
 
-        session.send("i'm reviwing your data...");
+       // session.send("i'm reviwing your data...");
 
         AllocateUserEmail();
 
