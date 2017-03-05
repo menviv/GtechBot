@@ -1419,6 +1419,8 @@ bot.dialog('/SearchTicket', [
 
                     if (nresultLen > 0 ) {
 
+                        session.send("Ready? so this is what I was able to find:");
+
                         for (var i=0; i<nresultLen; i++ ) {
 
                             session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
