@@ -364,15 +364,11 @@ bot.dialog('/validateUser', [
 
         function EmailNotFound() {
 
-            if (session.userData.emailValidated != 'True') {
-
                 session.send("I don't really know you...");
 
                 session.endDialog();
 
                 session.beginDialog("/");
-
-            } 
 
         }                  
 
