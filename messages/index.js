@@ -779,43 +779,27 @@ bot.dialog('/getUserQuestion', [
 
             });
 
-            session.endDialog();
+            //session.endDialog();
 
-            session.beginDialog("/location", { location: "userAttachment" });
-            
-        } else {
-            session.send("ok");
-        }
-    }
-]);
-
-
-
-
-bot.dialog('/getUserAttachQuestion', [
-    function (session) {
+            //session.beginDialog("/location", { location: "userAttachment" });
 
             builder.Prompts.attachment(session, "By the way... screenshots or any visual element will help me to help you.. ");
-
+            
+        } 
     },
     function (session, results) {
 
-        if (results.response) {
+         if (results.response) {
 
-            
-
-            session.send(results.response);
+               session.send(results.response);
 
             //session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
 
-            session.beginDialog("/location", { location: "repath" });
+                session.beginDialog("/location", { location: "repath" });
             
-        } else {
-            session.send("ok");
-        }
+        } 
     }
 ]);
-
 
 
 
