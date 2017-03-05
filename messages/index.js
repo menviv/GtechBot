@@ -1464,8 +1464,10 @@ bot.dialog('/respondToMtyTicket', [
 
         session.send("List of your open tickets:");
 
+        var o_ID = new mongo.ObjectID(UserID);
 
-                var cursor = collTickets.find({ "Status" : "new", "UserID" : UserID});
+
+                var cursor = collTickets.find({ "Status" : "new", "UserID" : o_ID});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
