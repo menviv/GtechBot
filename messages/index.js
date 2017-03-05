@@ -298,7 +298,9 @@ bot.dialog('/validateUser', [
 
         session.userData.email = UserEmail;
 
-        session.send("Thank you");
+        session.sendTyping();
+
+        session.send("i'm reviwing your data...");
 
         AllocateUserEmail();
 
@@ -358,6 +360,8 @@ bot.dialog('/validateUser', [
                 session.send("I don't really know you...");
 
                 session.endDialog();
+
+                session.beginDialog("/");
 
             }
 
@@ -936,7 +940,9 @@ bot.dialog('logoutDialog', function (session, args) {
 
         session.userData.Authanticated = 'False';
 
-        session.userData.adminTokenReset == 'False'
+        session.userData.adminTokenReset == 'False';
+
+        session.userData.emailValidated == 'False'; 
 
         session.beginDialog("/");
 
