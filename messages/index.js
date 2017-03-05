@@ -1443,34 +1443,10 @@ bot.dialog('/SearchTicket', [
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
-                                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Review', 'https://docs.botframework.com/en-us/', 'Review2')
+                                            builder.CardAction.dialogAction(session, "weather", "Seattle, WA", "Current Weather")
                                         ])
                                 ]);
                             session.send(msg);
-
-
-
-/*
-
-                            function createThumbnailCard(session) {
-                                return new builder.ThumbnailCard(session)
-                                    .title('Ticket Card No: ' + result[i].ObjectNo)
-                                    .subtitle(result[i].ObjectTxt)
-                                    .text(' Slack, Office 365 mail and other popular services.')
-                                    .images([
-                                        builder.CardImage.create(session, 'https://www.arlnow.com/wp-content/uploads/2013/12/Theft-bots.jpg')
-                                    ])
-                                    .buttons([
-                                        builder.CardAction.openUrl(session, 'https://docs.botframework.com/en-us/', 'Get Started')
-                                    ]);
-                            }
-
-
-                            var msg = new builder.Message(session).addAttachment(ThumbnailCardName);
-
-                            session.send(msg);
-
-*/
 
                         }
                         
@@ -1491,24 +1467,12 @@ bot.dialog('/SearchTicket', [
 ]);
 
 
-
-bot.dialog('/cards', [
-    function (session) {
-        var msg = new builder.Message(session)
-            .textFormat(builder.TextFormat.xml)
-            .attachments([
-                new builder.HeroCard(session)
-                    .title("Hero Card")
-                    .subtitle("Space Needle")
-                    .text("The <b>Space Needle</b> is an observation tower in Seattle, Washington, a landmark of the Pacific Northwest, and an icon of Seattle.")
-                    .images([
-                        builder.CardImage.create(session, "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Seattlenighttimequeenanne.jpg/320px-Seattlenighttimequeenanne.jpg")
-                    ])
-                    .tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
-            ]);
-        session.endDialog(msg);
+bot.dialog('/weather', [
+    function (session, args) {
+        session.endDialog("The weather in %s is 71 degrees and raining.", args.data);
     }
 ]);
+bot.beginDialogAction('weather', '/weather'); 
 
 
 
