@@ -845,34 +845,20 @@ bot.dialog('/getUserQuestion', [
 
          if (results.response) {
 
-               session.send(results.response);
+                if (results.response) {
+                console.log('File received.');
+                } else {
+                console.log('No file received.');
+                }
 
             //session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
 
-                session.beginDialog("/location", { location: "repath" });
+             //   session.beginDialog("/location", { location: "repath" });
             
         } 
     }
 ]);
 
-/*
-
-
-
-bot.add('/', [
-  (session) => {
-    builder.Prompts.attachment(session, 'Please give me a file...');
-  },
-  (session, results, next) => {
-    if (results.response) {
-      console.log('File received.');
-    } else {
-      console.log('No file received.');
-    }
-  }
-]);
-
-*/
 
 
 
