@@ -1103,7 +1103,7 @@ bot.dialog('/adminAuth', [
     },
     function (session, results) {
 
-        var cursor = collUsers.find({"_id": UserID});
+        var cursor = collUsers.find({"Email": UserEmail});
         var result = [];
         cursor.each(function(err, doc) {
             if(err)
