@@ -215,10 +215,11 @@ bot.dialog('/', [
 
             session.beginDialog("/signin"); 
 
-        } else {
+        } else if (session.userData.emailValidated == 'False') {
 
-            //session.beginDialog("/RegisterUser"); 
-            session.send("I'm sorry, but I can't find your email on my lists.. please you contact me by Email to complete your registration");
+            session.send("I'm sorry, but I can't find your email on my lists.. please leave a message to my supervisor and he will perform his magics...");
+
+            session.beginDialog("/ErrorAllocateEmail"); 
 
         }
 
@@ -296,13 +297,9 @@ bot.dialog('/validateUser', [
 
         UserEmail = results.response.toLocaleLowerCase();
 
-        //session.userData.email = UserEmail;
+       session.sendTyping();
 
-       // session.sendTyping();
-
-       // session.send("i'm reviwing your data...");
-
-        AllocateUserEmail();
+       AllocateUserEmail();
 
 
 
@@ -316,8 +313,6 @@ bot.dialog('/validateUser', [
                     if (doc === null) {
                         // doc is null when the last document has been processed
 
-                        session.send("dddddddd: " + result.length);
-
                         if (result.length == 1) {
 
                             session.userData.emailValidated = 'True';
@@ -330,7 +325,7 @@ bot.dialog('/validateUser', [
 
                         } else {
 
-                            session.userData.emailValidated == 'False';
+                            session.userData.emailValidated = 'False';
 
                             session.userData.email = "";
 
@@ -364,11 +359,8 @@ bot.dialog('/validateUser', [
 
         function EmailNotFound() {
 
-                session.send("I don't really know you...");
 
                 session.endDialog();
-
-                //session.beginDialog("/");
 
         }                  
 
@@ -414,6 +406,8 @@ bot.dialog('/signin', [
                             SendInfoToExistingUser(); 
 
                         } else {
+
+                            session.userData.emailValidated == 'False'
 
                             session.userData.Authanticated = 'True';
 
