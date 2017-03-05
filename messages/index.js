@@ -1437,7 +1437,7 @@ bot.dialog('/SearchTicket', [
                                     new builder.ThumbnailCard(session)
                                         .title('Ticket Card No: ' + result[i].ObjectNo)
                                         .subtitle(result[i].ObjectTxt)
-                                        .text("The <b>Space Needle</b> is an observation tower in Seattle, Washington, a landmark of the Pacific Northwest, and an icon of Seattle.")
+                                        .text("Status: " + result[i].Status)
                                         .images([
                                             builder.CardImage.create(session, 'https://www.arlnow.com/wp-content/uploads/2013/12/Theft-bots.jpg')
                                         ])
