@@ -712,12 +712,6 @@ bot.dialog('/location', [
 
             session.beginDialog("/adminGenReq");
 
-        }  else if (session.userData.userRepondedToTicket == 'True' ) {
-
-            session.send("Thank you for this, I will review your response and feedback in the next few hours.");
-
-            session.replaceDialog("/location", { location: "repath" }); 
-
         }
         
     }
@@ -1426,7 +1420,7 @@ bot.dialog('/respondToMtyTicket', [
     },
     function (session, results) {
 
-        if (session.userData.adminAuth == 'True' || session.userData.UserAuthResponse == 'True') {
+        if (session.userData.UserAuthResponse == 'True') {
 
             var ticketNO = results.response;
 
@@ -1441,10 +1435,10 @@ bot.dialog('/respondToMtyTicket', [
     },    
     function (session, results) {
 
-        var TicketResponse = results.response;
-        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+            var TicketResponse = results.response;
+            var ticketNumberToHandle = session.userData.ticketNumberToHandle;
 
-        ResponseID = new mongo.ObjectID(); 
+            ResponseID = new mongo.ObjectID(); 
 
             var TicketResponseRecord = {
                 'CreatedTime': LogTimeStame,
@@ -1464,9 +1458,9 @@ bot.dialog('/respondToMtyTicket', [
 
             session.userData.UserAuthResponse = 'false';
 
-            session.userData.userRepondedToTicket = 'True';
+            session.send("Thank you for this, I will review your response and feedback in the next few hours.");
 
-            
+            session.replaceDialog("/location", { location: "repath" }); 
 
             session.endDialog();  
         
