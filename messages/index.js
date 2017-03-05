@@ -27,6 +27,7 @@ var collOrgs;
 var collUsers;
 var collAdminRequests;
 var collTicketResponses;
+var collLog;
 
 // Initialize connection once
 
@@ -42,6 +43,7 @@ mongo.MongoClient.connect(connString, function(err, database) {
   collUsers = dbm.collection('Users');
   collAdminRequests = dbm.collection('AdminRequests');
   collTicketResponses = dbm.collection('TicketResponses');
+  collLog = dbm.collection('SysLog');
 
 
   // Initialize indexes for Free Search queries
@@ -106,6 +108,7 @@ var bot = new builder.UniversalBot(connector);
 
 
 var UserEmail;
+var EmailError;
 var UserName;
 var UserOrg;
 var UserID;
@@ -240,47 +243,7 @@ bot.dialog('/', [
 
     function (session, results) {
 
-/*
-        UserOrg = results.response.entity;
 
-        session.userData.Org = UserOrg;
-
-        RegisterNewUser();
-
-        function RegisterNewUser() {
-
-            UserID = new mongo.ObjectID(); 
-
-            var UserRecord = {
-                'CreatedTime': LogTimeStame,
-                '_id': UserID,
-                'CreatedBy':'admin',
-                'ObjectType':'UserRecord',
-                'Name':UserName,
-                'Email':UserEmail,
-                'Org':UserOrg,
-                'ObjectFormat':'txt',
-                'Status':'draft'
-            }    	
-            
-            collUsers.insert(UserRecord, function(err, result){
-
-                session.userData.userid = UserID;
-
-            });
-
-            session.userData.Authanticated = 'True';
-
-            session.send("Thank you for sharing this information with me."); 
-
-            session.beginDialog("/location", { location: "path" });
-
-        }
-
-
-   */     
-
-        
 
     }
 ]);
@@ -295,7 +258,9 @@ bot.dialog('/validateUser', [
     },
     function (session, results) {
 
-        UserEmail = results.response.toLocaleLowerCase();
+       UserEmail = results.response.toLocaleLowerCase();
+
+       EmailError =  results.response.toLocaleLowerCase();
 
        session.sendTyping();
 
@@ -592,6 +557,47 @@ bot.dialog('/validateOrg', [
 
     }
 ]);
+
+
+
+
+
+
+bot.dialog('/ErrorAllocateEmail', [
+    function (session) {
+
+        builder.Prompts.text(session, "Any comments that you would like me to share with the supervisor?");
+
+    },
+    function (session, results) {
+
+            var AdmibRequestID = new mongo.ObjectID(); 
+
+                var ErrorRecord = {
+                    'CreatedTime': LogTimeStame,
+                    '_id': AdmibRequestID,
+                    'Email': EmailError,
+                    'Comments': results.response,
+                    'RequestType':'loginAuth_error_EmailnotAuthanticated'
+                }    	
+                
+                collLog.insert(ErrorRecord, function(err, result){
+
+                });            
+
+            session.send("Ok, I've just notified my supervisorand he said he will cantact you directly within the next 24 hours. ");
+
+            session.send("I hope that helps...");
+
+            session.endDialog();
+     
+    }
+]);
+
+
+
+
+
 
 
 
