@@ -43,6 +43,44 @@ mongo.MongoClient.connect(connString, function(err, database) {
   collAdminRequests = dbm.collection('AdminRequests');
   collTicketResponses = dbm.collection('TicketResponses');
 
+
+  // Initialize indexes for Free Search queries
+
+collTickets.dropIndexes(
+	
+	function (err, result) {
+      if (err) throw err;
+      //console.log(result);
+   });
+
+
+	collTickets.createIndex( 
+
+        {"$**":"text"},
+	
+	function (err, result) {
+      if (err) throw err;
+   });
+
+
+collTicketResponses.dropIndexes(
+	
+	function (err, result) {
+      if (err) throw err;
+      //console.log(result);
+   });
+
+
+	collTicketResponses.createIndex( 
+
+        {"$**":"text"},
+	
+	function (err, result) {
+      if (err) throw err;
+   });
+
+
+
 });
 
 
@@ -817,6 +855,8 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.send("use '/home' to acknoledge me about your need for assitance");
 
+        session.send("use '/sticket' - to ask to perform a simple search to allocate one or more tickets");
+
         session.send("use '/mtickets' - to get a list of your tickets");
 
         session.send("use '/otickets' - to get a list of your open tickets");
@@ -1318,6 +1358,84 @@ bot.dialog('beAdminModeDialog', function (session, args) {
         }
     } 
 });
+
+
+
+bot.dialog('SearchTicketDialog', function (session, args) {
+
+            session.endDialog();
+
+            session.beginDialog("/SearchTicket");
+
+
+}).triggerAction({ 
+    onFindAction: function (context, callback) {
+        // Recognize users utterance
+        switch (context.message.text.toLowerCase()) {
+            case '/sticket':
+                callback(null, 1.0, { topic: 'sticket' });                 
+                break;
+            default:
+                callback(null, 0.0);
+                break;
+        }
+    } 
+});
+
+
+
+
+
+
+
+bot.dialog('/SearchTicket', [
+    function (session) {
+
+        session.send("Ok, I will perform a deep search within your tickets by any word / phrase or number that might be included within our long term relationship. ");
+
+        builder.Prompts.text(session, "So bring it on..");      
+
+    },
+    function (session, results) {
+
+        var SearchValue = results.response;
+
+            var cursor = collTickets.find({$text: {$search: SearchValue}});
+
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    var nresultLen = result.length;
+
+                    if (nresultLen > 0 ) {
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
+
+                            ticketsArray.push(result[i].ObjectNo);
+
+                        }
+                        
+                    } else {
+
+                        session.send("I was unable to find anything...");
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                }); 
+
+            
+    }
+]);
 
 
 
