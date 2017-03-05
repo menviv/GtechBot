@@ -1018,7 +1018,7 @@ bot.dialog('/myTickets', [
 
         session.send("Your tickets: ");
 
-        var cursor = collTickets.find({"UserID": UserID});
+        var cursor = collTickets.find({"Email": UserEmail});
         var result = [];
         cursor.each(function(err, doc) {
             if(err)
@@ -1057,7 +1057,7 @@ bot.dialog('/myOpenTickets', [
 
         session.send("Your open tickets: ");
 
-        var cursor = collTickets.find({"UserID": UserID, "Status" : "new"});
+        var cursor = collTickets.find({"Email": UserEmail, "Status" : "new"});
         var result = [];
         cursor.each(function(err, doc) {
             if(err)
