@@ -613,12 +613,12 @@ var paths = {
 
     "path": { 
         description: "So now, how can I help you?",
-        commands: { "You owe me an answer on a ticket": "feedback", "I have a question": "question", "I have a tech. problem": "support", "I have a request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASAP": "callmeback"  }
+        commands: { "You owe me an answer on a ticket": "feedback", "I have a question": "question", "I have a tech. problem": "support", "I have a request": "request", "I want to brainstorm with someone[soon]": "soon", "Call me back ASAP[soon]": "soon"  }
     },
 
     "repath": { 
         description: "Anything else I can I help you with?",
-        commands: { "You owe me an answer on a ticket": "feedback", "I have another question": "question", "I have another tech. problem": "support", "I have another request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASAP": "callmeback"  }
+        commands: { "You owe me an answer on a ticket": "feedback", "I have another question": "question", "I have another tech. problem": "support", "I have another request": "request", "I want to brainstorm with someone[soon]": "soon", "Call me back ASAP[soon]": "soon"  }
     }, 
 
     "reAdminAuth": { 
@@ -643,12 +643,12 @@ var paths = {
 
     "request": { 
         description: "Your request is about...:",
-        commands: { "My org is not on the list, can you add it?": "orgnotfound", "My user is not an authorised admin, can you set it for me?": "setuserasadmin", "something else": "requestelse"  }
+        commands: { "Org Not Found?": "orgnotfound", "My User?": "setuserasadmin", "Else": "requestelse"  }
     }, 
 
     "question": { 
         description: "Your question is related to:",
-        commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
+        commands: { "Prod App": "prodapp", "Dev App": "devapp", "CR": "newcr"  }
     },  
 
             "prodapp": { 
@@ -669,7 +669,7 @@ var paths = {
 
     "support": { 
         description: "I guess that you need my help with a technical issue, right? what is it related to:",
-        commands: { "an application in production": "prodapp", "an application in development": "devapp", "a new feature": "newcr"  }
+        commands: { "Prod App": "prodapp", "Dev App": "devapp", "CR": "newcr"  }
     }, 
 
     "callmeback": { 
@@ -753,6 +753,12 @@ bot.dialog('/location', [
             session.userData.engagementReasonSevirityLevel = destination;
 
             session.beginDialog("/getUserQuestion");
+
+        } else if (destination == 'soon') {
+
+            session.send("Can't you be patiant? I'm working hard to get this done for you...");
+
+            session.replaceDialog("/location", { location: repath });
 
         } else if (destination == 'userAttachment') {
 
