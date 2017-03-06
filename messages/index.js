@@ -1104,11 +1104,49 @@ bot.dialog('/myTickets', [
 
                var nresultLen = result.length;
 
-               for (var i=0; i<nresultLen; i++ ) {
+            //   for (var i=0; i<nresultLen; i++ ) {
 
-                   session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
+            //       session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
 
-               }
+            //   }
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+
+                            if (result[i].Files[0].thumbnailUrl) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+
+
+
+
+
 
                 return;
             }
@@ -1145,11 +1183,40 @@ bot.dialog('/myOpenTickets', [
 
                var nresultLen = result.length;
 
-               for (var i=0; i<nresultLen; i++ ) {
+                        for (var i=0; i<nresultLen; i++ ) {
 
-                   session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt + " | " + result[i].Status);
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-               }
+                            if (result[i].Files[0].thumbnailUrl) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+
+
 
                 return;
             }
@@ -1456,24 +1523,15 @@ bot.dialog('/SearchTicket', [
 
                         for (var i=0; i<nresultLen; i++ ) {
 
-                            //session.send(result[i].ObjectNo + ": " + result[i].ObjectTxt);
-
-                            //ticketsArray.push(result[i].ObjectNo);
-
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
                             if (result[i].Files[0].thumbnailUrl) {
-
-                           //     thumbImg = result[i].Files.attachement.thumbnailUrl;
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
                             }
 
-                        
-
-                            
-
+    
                             var msg = new builder.Message(session)
                                 .textFormat(builder.TextFormat.xml)
                                 .attachments([
