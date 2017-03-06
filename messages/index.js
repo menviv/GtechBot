@@ -805,6 +805,127 @@ bot.dialog('/location', [
 
 
 
+bot.dialog('/UserResponseToTicket', [
+
+    function (session) {
+
+        session.sendTyping();
+
+        nTickckNumber = parseInt(TicketNumber);
+
+
+                var cursor = collTickets.find({ "ObjectNo" : nTickckNumber});
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    var nresultLen = result.length;
+
+                    if (nresultLen > 0 ) {
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+
+                            //var thumbImg;
+
+                            if (result[i].Files != undefined) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+
+
+
+                       // builder.Prompts.text(session, "Please provide me with the ticket number to load: "); 
+                        
+                    } else {
+
+                        session.send("I couldn't find your ticket...");
+
+                        session.beginDialog("/location", { location: "repath" });
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                });  
+
+
+    },
+    function (session, results) {
+
+        if (session.userData.adminAuth = 'True') {
+
+            var ticketNO = results.response;
+
+            session.send("The chosen ticket is: " + ticketNO);
+
+            session.userData.ticketNumberToHandle = ticketNO;  
+
+            builder.Prompts.text(session, "Your response will be:  ");   
+
+        }
+            
+    },    
+    function (session, results) {
+
+        var TicketResponse = results.response;
+        var ticketNumberToHandle = session.userData.ticketNumberToHandle;
+
+        ResponseID = new mongo.ObjectID(); 
+
+            var TicketResponseRecord = {
+                'CreatedTime': LogTimeStame,
+                'UserID': UserID,
+                '_id': ResponseID,
+                'CreatedBy':UserName,
+                'CreatedByEmail':UserEmail,
+                'TicketNo':ticketNumberToHandle,
+                'ObjectFormat':'txt',
+                'ObjectTxt':TicketResponse,
+                'Status':'unread'
+            }    	
+            
+            collTicketResponses.insert(TicketResponseRecord, function(err, result){
+
+            }); 
+
+            session.endDialog();  
+        
+    },
+]);
+
+
+
 
 
 
@@ -1786,7 +1907,12 @@ bot.dialog('/SearchTicket', [
 
 bot.dialog('/AddCommentToTicket', [
     function (session, args) {
-        session.endDialog("The weather in %s is 71 degrees and raining.", args.data);
+
+        TicketNumber = args.data;
+
+        session.endDialog();
+
+        session.beginDialog("/UserResponseToTicket");
     }
 ]);
 bot.beginDialogAction('comment', '/AddCommentToTicket'); 
