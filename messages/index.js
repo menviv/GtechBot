@@ -1829,7 +1829,7 @@ bot.dialog('/AdminActions', [
     function (session) {
         
 
-        builder.Prompts.choice(session, "[Admin mode:] Administrator functions", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets"]);
+        builder.Prompts.choice(session, "Admin mode: Administrator functions", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets" , "In-Process Tickets", "Closed Tickets"]);
 
     },
     function (session, results) {
