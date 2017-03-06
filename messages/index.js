@@ -1831,20 +1831,108 @@ bot.beginDialogAction('reopen', '/ReOpenTicket');
 
 
 
+
+bot.dialog('/AdminSearchTicket', [
+    function (session) {
+
+        builder.Prompts.text(session, "Admin Search - So bring it on..");      
+
+    },
+    function (session, results) {
+
+        var SearchValue = results.response.toString();
+
+            var cursor = collTickets.find({ $text: {$search: SearchValue}});
+
+                var result = [];
+                cursor.each(function(err, doc) {
+                    if(err)
+                        throw err;
+
+                    if (doc === null) {
+
+                    var nresultLen = result.length;
+
+
+
+                    if (nresultLen > 0 ) {
+
+                        session.send("Ready? so this is what I was able to find:");
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+
+                            //var thumbImg;
+
+                            if (result[i].Files != undefined) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+                        
+                    } else {
+
+                        session.send("I was unable to find anything...");
+
+                    }
+
+                        return;
+                    }
+                    
+                    result.push(doc);
+                }); 
+
+            
+    }
+]);
+
+
+
+
+
+
+
+
+
+
 bot.dialog('/AdminActions', [
     function (session) {
         
 
-        builder.Prompts.choice(session, "Admin mode: Administrator functions", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "New Tickets" , "In-Process Tickets", "Closed Tickets"]);
+        builder.Prompts.choice(session, "Admin mode: Administrator functions", ["Respond To Ticket", "Search Ticket", "Create New User", "User List", "New Tickets" , "In-Process Tickets", "Closed Tickets"]);
 
     },
     function (session, results) {
 
         var adminActions = results.response.entity;
 
-        if (adminActions == 'Create New Org') {
+        if (adminActions == 'Search Ticket') {
 
-            session.beginDialog("/CreateNewOrg");
+            session.beginDialog("/AdminSearchTicket");
 
         } else if (adminActions == 'Create New User') {
 
