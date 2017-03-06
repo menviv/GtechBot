@@ -853,7 +853,7 @@ bot.dialog('/getUserQuestion', [
                         collTickets.update (
                         { "_id": o_ID },
                        // { $set: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame }}
-                        { $push: { Files: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame, 'FileType' : "ticketAttachment" } } },
+                        { $push: { Files: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame, 'FileType' : "ticketAttachment" } } }
                         )
 
                          session.send("Nice one! Thanks...");
