@@ -1463,7 +1463,7 @@ bot.dialog('/SearchTicket', [
 
                          //   }
 
-                         session.send(result[i].Files.attachement.thumbnailUrl);
+                        // session.send(result[i].Files.attachement.thumbnailUrl);
 
                             
 
