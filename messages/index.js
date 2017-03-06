@@ -836,7 +836,7 @@ bot.dialog('/getUserQuestion', [
 
             });
 
-           //session.beginDialog("/location", { location: "repath" });
+
 
            builder.Prompts.attachment(session, 'Can you attach a screeshot that will help me better understanbd your request?');
             
@@ -852,16 +852,19 @@ bot.dialog('/getUserQuestion', [
 
                         collTickets.update (
                         { "_id": o_ID },
-                        { $set: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame } })
+                       // { $set: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame }}
+                        { $push: { Files: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame, 'FileType' : "ticketAttachment" } } },
+                        )
 
-         } else {
+                         session.send("Nice one! Thanks...");
 
-                 session.send('No file received.');
+                        session.beginDialog("/location", { location: "repath" });
 
+                } else {
 
-            //session.send("Ok, now let me do some thinking about it, and I will get back to you with an answer in " + ResponseTimeFrameLabel + ", meanwhile this is your ticket number is: Sup" + TicketNo); 
+                    session.send("Oops...it's not my fault but something went wrong and the file was never really uploaded...");
 
-             //   session.beginDialog("/location", { location: "repath" });
+                    session.beginDialog("/location", { location: "repath" });
             
         } 
     }
