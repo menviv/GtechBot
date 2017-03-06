@@ -1244,9 +1244,7 @@ bot.dialog('/myOpenTickets', [
 bot.dialog('/AdminClosedtickets', [
     function (session) {
 
-        session.send("Admin Mode: new tickets: ");
-
-        var o_ID = new mongo.ObjectID(UserID);
+        session.send("Admin Mode: Closed tickets: ");
 
         var cursor = collTickets.find({"Status" : "Closed"});
         var result = [];
@@ -1380,8 +1378,6 @@ bot.dialog('/AdminInProcesstickets', [
     function (session) {
 
         session.send("Admin Mode: In-Process tickets: ");
-
-        var o_ID = new mongo.ObjectID(UserID);
 
         var cursor = collTickets.find({"Status" : "In Process"});
         var result = [];
