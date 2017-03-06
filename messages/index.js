@@ -1465,7 +1465,7 @@ bot.dialog('/SearchTicket', [
                                         .subtitle(result[i].ObjectTxt)
                                         .text("Status: " + result[i].Status)
                                         .images([
-                                            builder.CardImage.create(session, 'https://www.arlnow.com/wp-content/uploads/2013/12/Theft-bots.jpg')
+                                            builder.CardImage.create(session, result[i].Files[0].attachement[0].thumbnailUrl)
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
