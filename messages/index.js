@@ -811,10 +811,10 @@ bot.dialog('/UserResponseToTicket', [
 
         session.sendTyping();
 
-       // nTickckNumber = parseInt(TicketNumber);
+        nTickckNumber = parseInt(TicketNumber);
 
 
-                var cursor = collTickets.find({ "ObjectNo" : TicketNumber});
+                var cursor = collTickets.find({ "ObjectNo" : nTickckNumber});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
@@ -826,7 +826,7 @@ bot.dialog('/UserResponseToTicket', [
 
                     if (nresultLen > 0 ) {
 
-                        for (var i=0; i<nresultLen; i++ ) {
+                        
 
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
@@ -834,7 +834,7 @@ bot.dialog('/UserResponseToTicket', [
 
                             if (result[i].Files != undefined) {
 
-                                    thumbImg = result[i].Files[0].thumbnailUrl;
+                                    thumbImg = result[0].Files[0].thumbnailUrl;
 
                             }
 
@@ -843,23 +843,22 @@ bot.dialog('/UserResponseToTicket', [
                                 .textFormat(builder.TextFormat.xml)
                                 .attachments([
                                     new builder.ThumbnailCard(session)
-                                        .title('Ticket Card No: ' + result[i].ObjectNo)
-                                        .subtitle(result[i].ObjectTxt)
-                                        .text("Status: " + result[i].Status)
+                                        .title('Ticket Card No: ' + result[0].ObjectNo)
+                                        .subtitle(result[0].ObjectTxt)
+                                        .text("Status: " + result[0].Status)
                                         .images([
                                             builder.CardImage.create(session, thumbImg)
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
-                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
-                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
-                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
-                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                            builder.CardAction.dialogAction(session, "close", result[0].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[0].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[0].ObjectNo, "Review")
                                         ])
                                 ]);
                             session.send(msg);
 
-                        }
+                        
 
 
 
