@@ -1459,7 +1459,7 @@ bot.dialog('/SearchTicket', [
 
                             if (result[i].Files.attachement[0].thumbnailUrl) {
 
-                                thumbImg = result[i].Files.attachement[0].thumbnailUrl;
+                                thumbImg = result[i].Files.attachement.thumbnailUrl;
 
                             }
 
