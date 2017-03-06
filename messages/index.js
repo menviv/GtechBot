@@ -850,11 +850,15 @@ bot.dialog('/getUserQuestion', [
 
                 var o_ID = new mongo.ObjectID(TicketID); 
 
+                var thumbnailUrl = results.response[0].thumbnailUrl;
+
+                var contentUrl = results.response[0].contentUrl;
+
                         collTickets.update (
                         { "_id": o_ID },
                        // { $set: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame }}
                        // { $push: { Files: { $each: [  results.response  ] } } }
-                        { $push: { Files: { 'thumbnailUrl': results.response[0].thumbnailUrl, 'contentUrl': results.response[0].contentUrl, 'AttachmentUploadDate':LogTimeStame, 'FileType' : "ticketAttachment" } } }
+                        { $push: { Files: { $each: [  {thumbnailUrl: thumbnailUrl, contentUrl: contentUrl, "AttachmentUploadDate" :LogTimeStame, "FileType" : "ticketAttachment" } ] } } }
                         )
 
                          session.send("Nice one! Thanks...");
