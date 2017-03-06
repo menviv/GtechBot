@@ -1466,7 +1466,7 @@ bot.dialog('/SearchTicket', [
 
                            //     thumbImg = result[i].Files.attachement.thumbnailUrl;
 
-                                    session.send(result[i].Files[0].thumbnailUrl);
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
 
                             }
 
