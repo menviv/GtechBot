@@ -613,12 +613,12 @@ var paths = {
 
     "path": { 
         description: "So now, how can I help you?",
-        commands: { "I owe you my feedback on a ticket": "feedback", "I have a question": "question", "I have a technical problem": "support", "I have a special request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASAP": "callmeback"  }
+        commands: { "You owe me an answer on a ticket": "feedback", "I have a question": "question", "I have a tech. problem": "support", "I have a request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASAP": "callmeback"  }
     },
 
     "repath": { 
-        description: "Anyhing else I can I help you with?",
-        commands: { "I have another question": "question", "I have another technical problem": "support", "My tickets": "mytickets"  }
+        description: "Anything else I can I help you with?",
+        commands: { "You owe me an answer on a ticket": "feedback", "I have another question": "question", "I have another tech. problem": "support", "I have another request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASAP": "callmeback"  }
     }, 
 
     "reAdminAuth": { 
@@ -867,7 +867,7 @@ bot.dialog('/getUserQuestion', [
 
                 } else {
 
-                    session.send("Oops...it's not my fault but something went wrong and the file was never really uploaded...");
+                    session.send("I guess not...");
 
                     session.beginDialog("/location", { location: "repath" });
             
@@ -1942,7 +1942,7 @@ bot.dialog('/changeTicketStatus', [
 
         session.send("The current ticket no. is: " + ticketNumberToHandle);
 
-        builder.Prompts.choice(session, "Change the ticket status to:v", ["Closed", "In Process", "Pending Customer Response"]);
+        builder.Prompts.choice(session, "Change the ticket status to: ", ["Closed", "In Process", "Pending Customer Response"]);
 
 
     },
