@@ -1187,7 +1187,7 @@ bot.dialog('/myOpenTickets', [
 
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl) {
+                            if (result[i].Files[0].thumbnailUrl != undefined) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
@@ -1257,7 +1257,7 @@ bot.dialog('/AdminClosedtickets', [
 
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl) {
+                            if (result[i].Files[0].thumbnailUrl != undefined) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
@@ -1321,7 +1321,7 @@ bot.dialog('/AdminNewtickets', [
 
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl) {
+                            if (result[i].Files[0].thumbnailUrl != undefined) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
@@ -1388,7 +1388,7 @@ bot.dialog('/AdminInProcesstickets', [
 
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl) {
+                            if (result[i].Files[0].thumbnailUrl != undefined) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
