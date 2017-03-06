@@ -1728,11 +1728,11 @@ bot.dialog('/SearchTicket', [
 
                         for (var i=0; i<nresultLen; i++ ) {
 
-                            //var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            var thumbImg;
+                            //var thumbImg;
 
-                            if (result[i].Files) {
+                            if (result[i].Files != undefined) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
