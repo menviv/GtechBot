@@ -1321,7 +1321,7 @@ bot.dialog('/AdminNewtickets', [
 
                             var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl != 'undefined') {
+                            if (result[i].Files != undefined) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
