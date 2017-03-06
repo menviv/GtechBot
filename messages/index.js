@@ -1191,7 +1191,7 @@ bot.dialog('/myOpenTickets', [
 
                             //var thumbImg;
 
-                            if (result[i].Files != undefined) {
+                            if (result[i].Files != "undefined") {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
