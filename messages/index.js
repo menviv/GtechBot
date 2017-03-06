@@ -1455,13 +1455,15 @@ bot.dialog('/SearchTicket', [
 
                             //ticketsArray.push(result[i].ObjectNo);
 
-                            var thumbImg = "";
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files.attachement[0].thumbnailUrl) {
+                           // if (result[i].Files.attachement[0].thumbnailUrl) {
 
-                                thumbImg = result[i].Files.attachement.thumbnailUrl;
+                           //     thumbImg = result[i].Files.attachement.thumbnailUrl;
 
-                            }
+                         //   }
+
+                         session.send(result[i].Files.attachement.thumbnailUrl);
 
                             
 
