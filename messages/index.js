@@ -1103,7 +1103,7 @@ bot.dialog('logoutDialog', function (session, args) {
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case '/logout':
+            case '//logout':
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
