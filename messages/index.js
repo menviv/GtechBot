@@ -613,7 +613,7 @@ var paths = {
 
     "path": { 
         description: "So now, how can I help you?",
-        commands: { "I owe you my feedback on a ticket": "feedback", "I have a question": "question", "I have a technical problem": "support", "I have a special request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASPA": "callmeback"  }
+        commands: { "I owe you my feedback on a ticket": "feedback", "I have a question": "question", "I have a technical problem": "support", "I have a special request": "request", "I want to brainstorm with someone": "brainstorm", "Call me back ASAP": "callmeback"  }
     },
 
     "repath": { 
@@ -1236,6 +1236,207 @@ bot.dialog('/myOpenTickets', [
 
 
 
+
+bot.dialog('/AdminClosedtickets', [
+    function (session) {
+
+        session.send("Admin Mode: new tickets: ");
+
+        var o_ID = new mongo.ObjectID(UserID);
+
+        var cursor = collTickets.find({"Status" : "Closed"});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+            if (doc === null) {
+
+               var nresultLen = result.length;
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+
+                            if (result[i].Files[0].thumbnailUrl) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+
+
+
+                return;
+            }
+            // do something with each doc, like push Email into a results array
+            result.push(doc);
+        });      
+
+    },
+    function (session, results) {
+
+            session.beginDialog("/location", { location: "path" });
+            
+    }
+]);
+
+
+bot.dialog('/AdminNewtickets', [
+    function (session) {
+
+        session.send("Admin Mode: new tickets: ");
+
+        var o_ID = new mongo.ObjectID(UserID);
+
+        var cursor = collTickets.find({"Status" : "new"});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+            if (doc === null) {
+
+               var nresultLen = result.length;
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+
+                            if (result[i].Files[0].thumbnailUrl) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+
+
+
+                return;
+            }
+            // do something with each doc, like push Email into a results array
+            result.push(doc);
+        });      
+
+    },
+    function (session, results) {
+
+            session.beginDialog("/location", { location: "path" });
+            
+    }
+]);
+
+
+
+bot.dialog('/AdminInProcesstickets', [
+    function (session) {
+
+        session.send("Admin Mode: In-Process tickets: ");
+
+        var o_ID = new mongo.ObjectID(UserID);
+
+        var cursor = collTickets.find({"Status" : "In Process"});
+        var result = [];
+        cursor.each(function(err, doc) {
+            if(err)
+                throw err;
+            if (doc === null) {
+
+               var nresultLen = result.length;
+
+                        for (var i=0; i<nresultLen; i++ ) {
+
+                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+
+                            if (result[i].Files[0].thumbnailUrl) {
+
+                                    thumbImg = result[i].Files[0].thumbnailUrl;
+
+                            }
+
+    
+                            var msg = new builder.Message(session)
+                                .textFormat(builder.TextFormat.xml)
+                                .attachments([
+                                    new builder.ThumbnailCard(session)
+                                        .title('Ticket Card No: ' + result[i].ObjectNo)
+                                        .subtitle(result[i].ObjectTxt)
+                                        .text("Status: " + result[i].Status)
+                                        .images([
+                                            builder.CardImage.create(session, thumbImg)
+                                        ])
+                                        //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
+                                        .buttons([
+                                            builder.CardAction.dialogAction(session, "close", result[i].ObjectNo, "Close"),
+                                            builder.CardAction.dialogAction(session, "reopen", result[i].ObjectNo, "Re-Open"),
+                                            builder.CardAction.dialogAction(session, "review", result[i].ObjectNo, "Review"),
+                                            builder.CardAction.dialogAction(session, "comment", result[i].ObjectNo, "Comment")
+                                        ])
+                                ]);
+                            session.send(msg);
+
+                        }
+
+
+
+                return;
+            }
+            // do something with each doc, like push Email into a results array
+            result.push(doc);
+        });      
+
+    },
+    function (session, results) {
+
+            session.beginDialog("/location", { location: "path" });
+            
+    }
+]);
+
+
+
 bot.dialog('/adminAuth', [
 
     function (session) {
@@ -1651,9 +1852,17 @@ bot.dialog('/AdminActions', [
 
             session.beginDialog("/respondToTicket");
             
-        } else if (adminActions == 'Open Tickets') {
+        } else if (adminActions == 'New Tickets') {
 
-            session.beginDialog("/opentickets");
+            session.beginDialog("/AdminNewtickets");
+            
+        } else if (adminActions == 'In-Process Tickets') {
+
+            session.beginDialog("/AdminInProcesstickets");
+            
+        } else if (adminActions == 'Closed Tickets') {
+
+            session.beginDialog("/AdminClosedtickets");
             
         }
      
