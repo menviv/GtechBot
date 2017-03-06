@@ -846,15 +846,15 @@ bot.dialog('/getUserQuestion', [
 
          if (results.response) {
 
-                session.send('File received.' + results.response[0].contentUrl);
+                session.send('File received.');
 
                 var o_ID = new mongo.ObjectID(TicketID); 
 
                         collTickets.update (
                         { "_id": o_ID },
                        // { $set: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame }}
-                        { $push: { Files: { $each: [  results.response  ] } } }
-                       // { $push: { Files: { 'attachement': results.response, 'AttachmentUploadDate':LogTimeStame, 'FileType' : "ticketAttachment" } } }
+                       // { $push: { Files: { $each: [  results.response  ] } } }
+                        { $push: { Files: { 'thumbnailUrl': results.response[0].thumbnailUrl, 'contentUrl': results.response[0].contentUrl, 'AttachmentUploadDate':LogTimeStame, 'FileType' : "ticketAttachment" } } }
                         )
 
                          session.send("Nice one! Thanks...");
