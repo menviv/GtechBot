@@ -811,10 +811,10 @@ bot.dialog('/UserResponseToTicket', [
 
         session.sendTyping();
 
-        nTickckNumber = parseInt(TicketNumber);
+       // nTickckNumber = parseInt(TicketNumber);
 
 
-                var cursor = collTickets.find({ "ObjectNo" : nTickckNumber});
+                var cursor = collTickets.find({ "ObjectNo" : TicketNumber});
                 var result = [];
                 cursor.each(function(err, doc) {
                     if(err)
