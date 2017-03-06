@@ -1308,8 +1308,6 @@ bot.dialog('/AdminNewtickets', [
 
         session.send("Admin Mode: new tickets: ");
 
-        var o_ID = new mongo.ObjectID(UserID);
-
         var cursor = collTickets.find({"Status" : "new"});
         var result = [];
         cursor.each(function(err, doc) {
@@ -1829,7 +1827,7 @@ bot.dialog('/AdminActions', [
     function (session) {
         
 
-        builder.Prompts.choice(session, "Admin mode: Administrator functions", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "Open Tickets" , "In-Process Tickets", "Closed Tickets"]);
+        builder.Prompts.choice(session, "Admin mode: Administrator functions", ["Respond To Ticket", "Create New Org", "Create New User", "User List", "New Tickets" , "In-Process Tickets", "Closed Tickets"]);
 
     },
     function (session, results) {
