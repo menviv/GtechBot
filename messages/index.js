@@ -846,7 +846,7 @@ bot.dialog('/getUserQuestion', [
 
          if (results.response) {
 
-                session.send('File received.' + results.response);
+                session.send('File received.' + results.response[0].contentUrl);
 
                 var o_ID = new mongo.ObjectID(TicketID); 
 
