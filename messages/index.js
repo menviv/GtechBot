@@ -1112,9 +1112,11 @@ bot.dialog('/myTickets', [
 
                         for (var i=0; i<nresultLen; i++ ) {
 
-                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+                            //var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl) {
+                            var thumbImg;
+
+                            if (result[i].Files) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
@@ -1185,9 +1187,11 @@ bot.dialog('/myOpenTickets', [
 
                         for (var i=0; i<nresultLen; i++ ) {
 
-                            var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
+                            //var thumbImg = "http://www.reedyreels.com/wp-content/uploads/2015/08/ticket-icon-RR-300x252.png";
 
-                            if (result[i].Files[0].thumbnailUrl != undefined) {
+                            var thumbImg;
+
+                            if (result[i].Files) {
 
                                     thumbImg = result[i].Files[0].thumbnailUrl;
 
