@@ -1455,7 +1455,15 @@ bot.dialog('/SearchTicket', [
 
                             //ticketsArray.push(result[i].ObjectNo);
 
+                            var thumbImg = "";
 
+                            if (result[i].Files.attachement[0].thumbnailUrl) {
+
+                                thumbImg = result[i].Files.attachement[0].thumbnailUrl;
+
+                            }
+
+                            
 
                             var msg = new builder.Message(session)
                                 .textFormat(builder.TextFormat.xml)
@@ -1465,7 +1473,7 @@ bot.dialog('/SearchTicket', [
                                         .subtitle(result[i].ObjectTxt)
                                         .text("Status: " + result[i].Status)
                                         .images([
-                                            builder.CardImage.create(session, result[i].Files[0].attachement[0].thumbnailUrl)
+                                            builder.CardImage.create(session, thumbImg)
                                         ])
                                         //.tap(builder.CardAction.openUrl(session, "https://en.wikipedia.org/wiki/Space_Needle"))
                                         .buttons([
