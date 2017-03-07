@@ -28,7 +28,6 @@ var collUsers;
 var collAdminRequests;
 var collTicketResponses;
 var collLog;
-var collWhoIsThatBot;
 
 // Initialize connection once
 
@@ -45,7 +44,6 @@ mongo.MongoClient.connect(connString, function(err, database) {
   collAdminRequests = dbm.collection('AdminRequests');
   collTicketResponses = dbm.collection('TicketResponses');
   collLog = dbm.collection('SysLog');
-  collWhoIsThatBot = dbm.collection('WhoIsThatBot');
 
 
   // Initialize indexes for Free Search queries
@@ -102,6 +100,9 @@ var connector = useEmulator ? new builder.ChatConnector() : new botbuilder_azure
 
 var bot = new builder.UniversalBot(connector);
 
+//var bot = new builder.UniversalBot(connector, function (session) {
+ //   session.send("You said: '%s'. Try asking for 'help'.", session.message.text);
+//});
 
 
 
@@ -111,7 +112,6 @@ var EmailError;
 var UserName;
 var UserOrg;
 var UserID;
-var UserProfile;
 var TicketID;
 var ResponseTimeFrameLabel;
 var OrgType;
@@ -123,7 +123,6 @@ var nonHandledObjects
 var responses;
 var ticketsArray = [];
 var TicketNumber;
-var WhoIsThatBotResponseID
 
 
 
@@ -196,11 +195,13 @@ bot.dialog('/', [
 
         session.sendTyping();
 
-        session.send("Hi there, I guess that you expected to speak with... hmm... a person, but trust me I'm much more efficient and qualified to help you.");
+        session.send("Welcome! my name is SupBot and I will do my best to assist you.");
 
         session.sendTyping();
 
-        session.send( "If you want to learn a bit about me and my past experience, you can use and type '/whoisthatbot' at any time ");
+        session.send( "Also, you are welcome to use my HOT KEYS to skip my over politeness, to review them just type '/help' ");
+
+        session.sendTyping();
 
         session.beginDialog("/validateUser"); 
 
@@ -210,18 +211,12 @@ bot.dialog('/', [
 
         }
 
-    },   
+    },
     function (session, results) {
 
         if (session.userData.emailValidated == 'True') {
 
             session.beginDialog("/signin"); 
-
-        } else if (session.userData.emailValidated == 'NotLegal') {
-
-            session.send("Let's try again?");
-
-            session.beginDialog("/validateUser"); 
 
         } else if (session.userData.emailValidated == 'False') {
 
@@ -234,10 +229,6 @@ bot.dialog('/', [
             session.send("Thank you for your patiance");
 
             session.userData.emailValidated = '';
-
-        } else if (session.userData.whoIsThatBot == 'Done' || session.userData.emailValidated == 'New') {
-
-            session.beginDialog("/validateUser"); 
 
         }
 
@@ -270,48 +261,11 @@ bot.dialog('/validateUser', [
 
        UserEmail = results.response.toLocaleLowerCase();
 
+       EmailError =  results.response.toLocaleLowerCase();
 
-            function verifyEmail(UserEmail) {
-            var status = "false";     
-            var emailRegEx = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
-                if (UserEmail.search(emailRegEx) == -1) {
-                   // alert("Please enter a valid email address.");
-                } else {
-                 //   alert("Woohoo!  The email address is in the correct format and they are the same.");
-                    status = "true";
-                }
-                return status;
-            }
+       session.sendTyping();
 
-
-        var eLegalEmail = verifyEmail(UserEmail);
-
-        if (eLegalEmail == "false") {
-
-            session.sendTyping();
-
-            session.send("Are you sure that " + UserEmail  + " is a legal Email Address? I think not... "); 
-
-            session.userData.emailValidated = 'NotLegal';
-
-            session.endDialog();            
-
-
-        } else {
-
-            session.sendTyping();
-
-            AllocateUserEmail();
-
-            EmailError =  results.response.toLocaleLowerCase();
-
-        }
-
-
-
-       
-
-
+       AllocateUserEmail();
 
 
 
@@ -332,11 +286,8 @@ bot.dialog('/validateUser', [
                             UserName = result[0].Name;
                             UserOrg = result[0].Org;
                             UserID = result[0]._id;
-                            UserProfile = result[0].Profile;
 
-                            session.send("Good to have you back with me " + UserName); 
-
-                            session.endDialog();                          
+                            NextToSignIn();                            
 
                         } else {
 
@@ -344,7 +295,7 @@ bot.dialog('/validateUser', [
 
                             session.userData.email = "";
 
-                            session.endDialog(); 
+                            EmailNotFound();                           
 
                         }  
                         
@@ -354,7 +305,30 @@ bot.dialog('/validateUser', [
                     result.push(doc);
                 });
             
-        }               
+        }
+
+
+
+
+        function NextToSignIn() {
+
+            if (session.userData.emailValidated == 'True') {
+
+               session.send("Good to have you back with me " + UserName); 
+
+               session.endDialog();
+
+            }
+
+        } 
+
+
+        function EmailNotFound() {
+
+
+                session.endDialog();
+
+        }                  
 
 
     }
@@ -468,9 +442,7 @@ bot.dialog('/signin', [
 
             if (session.userData.Authanticated == 'True') {
 
-               session.send("So.. " + UserName + ", You have " + numberOfTickets + " open tickets and " + nonHandledObjects + " responses from me and you still didn't review."); 
-
-               session.send( "By the way,these are HOT KEYS / shortcuts to skip my over politeness, to review them just type '/help' ");
+               session.send("Good to have you back with me " + UserName + "! You have " + numberOfTickets + " open tickets and " + nonHandledObjects + " responses from me and you still didn't review."); 
 
             } else {
 
@@ -617,6 +589,8 @@ bot.dialog('/ErrorAllocateEmail', [
             session.sendTyping();               
 
             session.send("Ok, I've just notified my supervisor and he said he will cantact you directly within the next 24 hours. ");
+
+            session.sendTyping();
 
             session.send("I hope that helps... Goodbye.");
 
@@ -1038,25 +1012,21 @@ bot.dialog('helpDialog', function (session, args) {
 
         session.sendTyping();
 
-        session.send("use '/home' to go back to my office to instruct me on what you need me to do for you.");
+        session.send("use '/home' to acknoledge me about your need for assitance");
 
-        session.send("use '/sticket' - to ask my help with allocating one or more tickets");
+        session.send("use '/sticket' - to ask to perform a simple search to allocate one or more tickets");
 
-        session.send("use '/mtickets' - to ask me for a list of your tickets");
+        session.send("use '/mtickets' - to get a list of your tickets");
 
-        session.send("use '/otickets' - to ask me for a list of your open tickets");
+        session.send("use '/otickets' - to get a list of your open tickets");
 
-        session.send("use '/logout' - please try not to... this will be your way to say goodbye from me..");
+        session.send("use '/logout' - to end our current discussion and start a new one");
 
-        session.send("use '/reset' - to ask me to reset your password");
+        session.send("use '/reset' - to reset your password");
 
-        if (UserProfile == 'admin') {
+        session.send("use '/adminmode' - well...this is a restricted area and for authorized users only.");
 
-            session.send("use '/adminmode' - well...this is a restricted area and for authorized users only.");
-
-            session.send("use '/beadmin' - and I can promise to consider your request");
-
-        }
+        session.send("use '/beadmin' - and I can promise to consider your request");
 
         session.endDialog("Looking forward to your decision :)");
 
@@ -1078,34 +1048,6 @@ bot.dialog('helpDialog', function (session, args) {
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
                 callback(null, 1.0, { topic: 'help' });
-                break;
-            default:
-                callback(null, 0.0);
-                break;
-        }
-    } 
-});
-
-
-
-
-
-bot.dialog('whoisthatbotDialog', function (session, args) {
-
-    session.endDialog();
-
-    if (args.topic == 'whoisthatbot') {
-
-        session.beginDialog("/WhoIsThatBot");
-
-    } 
-
-}).triggerAction({ 
-    onFindAction: function (context, callback) {
-        // Recognize users utterance
-        switch (context.message.text.toLowerCase()) {
-            case '/whoisthatbot':
-                callback(null, 1.0, { topic: 'whoisthatbot' });              
                 break;
             default:
                 callback(null, 0.0);
@@ -1149,9 +1091,9 @@ bot.dialog('logoutDialog', function (session, args) {
 
         session.userData.Authanticated = 'False';
 
-        session.userData.adminTokenReset = 'False';
+        session.userData.adminTokenReset == 'False';
 
-        session.userData.emailValidated = 'New'; 
+        session.userData.emailValidated == 'False'; 
 
         session.beginDialog("/");
 
@@ -1763,7 +1705,7 @@ bot.dialog('adminDialog', function (session, args) {
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case '\createorg':
+            case '/createorg':
                 // You can trigger the action with callback(null, 1.0) but you're also
                 // allowed to return additional properties which will be passed along to
                 // the triggered dialog.
@@ -1863,7 +1805,7 @@ bot.dialog('SearchTicketDialog', function (session, args) {
     onFindAction: function (context, callback) {
         // Recognize users utterance
         switch (context.message.text.toLowerCase()) {
-            case '\sticket':
+            case '/sticket':
                 callback(null, 1.0, { topic: 'sticket' });                 
                 break;
             default:
@@ -2818,12 +2760,12 @@ bot.dialog('/CreateNewUser', [
 
         session.userData.newUserPassword = results.response;
 
-        builder.Prompts.choice(session, "[Admin mode:] Profile:", ["user", "admin"]);
+        builder.Prompts.choice(session, "[Admin mode:] Profile:", ["Standard User", "Admin"]);
             
     },
     function (session, results) {
 
-        session.userData.newUserProfile = results.response;
+        session.userData.Profile = results.response;
 
         builder.Prompts.choice(session, "[Admin mode:] Org:", ["HIV.ORG.IL", "888", "Annonimouse", "Gtech"]);
             
@@ -2892,72 +2834,7 @@ bot.dialog('/DefineNewOrgName', [
 
 
 
-bot.dialog('/WhoIsThatBot', [
-    function (session) {
-        
-        session.send("So you want to know a bit more about me? Let's start... ");
 
-        session.send("First I'll give you some background about my BotRace and then I will tell you more about me... and trust me... I have a lot to say :) ");
-
-        session.send("Well, I'm actually a software that is designed to automate the kinds of tasks you would usually do on your own, like making a dinner reservation, adding an appointment to your calendar or fetching and displaying information. ");
-
-        session.send("Me and my kind often live inside messaging apps — or are at least designed to look that way — and you should feel like you’re chatting back and forth as you would with a human. ");
-
-        session.send("This is the time to feedback me about how humanly, beautiful and smart I am.. ");
-
-        builder.Prompts.choice(session, "Right?", ["Hell you're not", "Damn Robot", "Like!", "I'd rather keep my thoughts to myself"]);
-
-    },
-    function (session, results) {
-
-        var UserResponseWhoIsThatBot = results.response.entity;
-
-        WhoIsThatBotResponseID = new mongo.ObjectID(); 
-
-            var NewRecord = {
-                'CreatedTime': LogTimeStame,
-                '_id': WhoIsThatBotResponseID,
-                'Type':'Text',
-                'Text':NewRecord
-            }    	
-            
-            collWhoIsThatBot.insert(NewRecord, function(err, result){
-
-            });
-
-
-            session.send("Noted... ");
-
-            session.send("So, I'm supBot and Gteam designed me to be there and assist you, our customers, with technical challenges, questions or even new requirment.");
-
-            session.send("I said that I'm much more efficiant that the human team, right?");
-
-            builder.Prompts.choice(session, "Would you like to know my qaulifications?", ["Yes", "No", "If I must..", "Leave me alone!"]);
-            
-    },
-    function (session, results) {
-
-        var UserResponseWhoIsThatBot = results.response.entity;
-
-        collTickets.update (
-        { "_id": WhoIsThatBotResponseID },
-        { $set: { 'Text2': UserResponseWhoIsThatBot, 'Text2CreatedDate':LogTimeStame } })
-
-
-
-
-            session.send("Again...noted... :) ");
-
-            session.send("Since this is the first version of me, I will notify you when the humans decide to finish my development.");
-
-            session.send("So... no... no... no... Goodbye....!!!");
-
-            session.userData.whoIsThatBot = 'Done';
-
-            session.endDialog();
-            
-    }
-]);
 
 
 /*
